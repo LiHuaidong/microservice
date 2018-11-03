@@ -7,5 +7,9 @@ package hdli.socket.tcp;
  */
 public class Message {
 
+	private int meesageType;
+
+	// private
+
 
 }

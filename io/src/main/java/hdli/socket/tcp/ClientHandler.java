@@ -1,5 +1,7 @@
 package hdli.socket.tcp;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -26,6 +28,12 @@ public class ClientHandler extends Thread {
 	public void run() {
 		try {
 			System.out.println("receive success");
+			DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
+			String msg = inputStream.readUTF();
+			System.out.println(msg);
+
+			DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
+			outputStream.writeUTF("I Love Huaidong");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
