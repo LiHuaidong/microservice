@@ -9,11 +9,22 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date: Created at 11:31 2018/10/29
  */
 @RestController
+@RequestMapping("hello")
 public class HelloController {
 
-	@RequestMapping
+	@RequestMapping("print")
 	public String index() {
 		return "Hello World";
+	}
+
+	@RequestMapping("print2")
+	public String print2() {
+		return "Hello World2";
+	}
+
+	@RequestMapping("print1")
+	public String print1() {
+		return "Hello World1";
 	}
 
 }
