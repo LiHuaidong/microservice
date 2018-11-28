@@ -18,14 +18,18 @@ public class BubbleSort
                     array[j] = b;
                 }
             }
-            for(int data : array) {
-                System.out.print(data + " ");
-            }
-            System.out.println();
+            privateArray(array);
         }
 
         int i = 5;
         System.out.println(--i);
         System.out.println(i);
+    }
+
+    private static void privateArray(int[] array) {
+        for(int data : array) {
+            System.out.print(data + " ");
+        }
+        System.out.println();
     }
 }
