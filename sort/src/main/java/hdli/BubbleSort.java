@@ -4,7 +4,7 @@ package hdli;
  * Hello world!
  *
  */
-public class BubbleApp
+public class BubbleSort
 {
     public static void main(String[] args) {
         int[] array = new int[] { 12, 23, 33, 11, 2, 11, 3, 12, 3, 12, 11, 33, 44, 1 };
@@ -23,5 +23,9 @@ public class BubbleApp
             }
             System.out.println();
         }
+
+        int i = 5;
+        System.out.println(--i);
+        System.out.println(i);
     }
 }
