@@ -15,7 +15,7 @@ public class QuickSort {
 		}
 		System.out.println();
 
-		partitionSort1(array, 0, array.length - 1);
+		partitionSort2(array, 0, array.length - 1);
 	}
 
 	private static void partitionSort1(int[] array, int start, int end) {
@@ -42,8 +42,7 @@ public class QuickSort {
 			for (; right > left && array[right] >= tip; right--);
 			swapByIndex(array, left, right);
 		}
-
-		
+		swap(array, left, tip);
 
 		if(left > start) partitionSort2(array, start, left - 1);
 		if(left < end) partitionSort2(array, left + 1, end);
@@ -54,6 +53,14 @@ public class QuickSort {
 		array[leftIndex] = array[rightIndex];
 		array[rightIndex] = tmp;
 
+		for(int data : array) {
+			System.out.print(data + " ");
+		}
+		System.out.println();
+	}
+
+	public static void swap(int[] array, int leftIndex, int tip) {
+		array[leftIndex] = tip;
 		for(int data : array) {
 			System.out.print(data + " ");
 		}
