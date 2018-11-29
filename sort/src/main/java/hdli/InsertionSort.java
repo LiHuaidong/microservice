@@ -15,25 +15,18 @@ public class InsertionSort {
 			tmp = array[i];
 			int j = i;
 
-//			for (; j > 0; j--) {
-//				if(tmp < array[j-1]) {
-//					array[j] = array[j-1];
-//				} else {
-//					break;
-//				}
-//			}
-//			array[j] = tmp;
-
-
 			while(j>0 && tmp < array[j-1]) {
 				array[j] = array[--j];
 			}
 			array[j] = tmp;
-
-			for(int data : array) {
-				System.out.print(data + " ");
-			}
-			System.out.println();
+			privateArray(array);
 		}
+	}
+
+	private static void privateArray(int[] array) {
+		for(int data : array) {
+			System.out.print(data + " ");
+		}
+		System.out.println();
 	}
 }
