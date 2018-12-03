@@ -5,7 +5,7 @@ public class SelectionSort {
     public static void main(String[] args) {
         int[] array = new int[] { 12, 23, 33, 11, 2, 11, 3, 12, 3, 12, 11, 33, 44, 1 };
         int length = array.length;
-        privateArray(array);
+        printArray(array);
         int min = 0;
         for (int i = 0; i < length - 1; i++) {
             min = i;
@@ -15,12 +15,12 @@ public class SelectionSort {
                 }
             }
             swapByIndex(array, i, min);
-            privateArray(array);
+            printArray(array);
         }
     }
 
-    private static void privateArray(int[] array) {
-        for(int data : array) {
+    private static void printArray(int[] array) {
+        for (int data : array) {
             System.out.print(data + " ");
         }
         System.out.println();
