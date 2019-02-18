@@ -1,4 +1,4 @@
-package hdli.services;
+package hdli.service;
 
 import hdli.mapper.CompanyMapper;
 import hdli.po.Company;
@@ -22,6 +22,17 @@ public class ClientService {
         List<Company> companyList = companyMapper.selectByExample(example);
 
         return companyList;
+    }
+
+    public String createCompanyByName(String name) {
+        Company company = new Company();
+        company.setName(name);
+        company.setType("02");
+        int updated = companyMapper.insert(company);
+        if (updated < 1) {
+            return "FAIL";
+        }
+        return "SUCCESS";
     }
 
 }
