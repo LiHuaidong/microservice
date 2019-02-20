@@ -13,6 +13,9 @@ public class GlobalResponse {
 
 	private Object data;
 
+	public GlobalResponse() {
+	}
+
 	public GlobalResponse(int code, String tipMessage) {
 		this.code = code;
 		this.tipMessage = tipMessage;

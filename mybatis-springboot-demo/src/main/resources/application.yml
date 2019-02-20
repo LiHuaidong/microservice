@@ -11,5 +11,16 @@ spring:
       maximum-pool-size: 20
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+
+# 日志相关配置
+logging:
+  file: ${spring.application.name}
+  level:
+    ROOT: INFO
+    hdli.mapper: debug
+  #config: classpath:logback-spring.xml
+
+

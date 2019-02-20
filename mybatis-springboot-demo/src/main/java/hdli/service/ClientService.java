@@ -1,6 +1,7 @@
 package hdli.service;
 
 import hdli.common.GlobalException;
+import hdli.common.GlobalResponse;
 import hdli.mapper.CompanyMapper;
 import hdli.po.Company;
 import hdli.po.CompanyExample;
@@ -32,17 +33,12 @@ public class ClientService {
         return companyList;
     }
 
-    public String createCompanyByParam(String name, String type) {
+    public int createCompanyByParam(String name, String type) {
         Company company = new Company();
         company.setName(name);
         company.setType(type);
         int updated = companyMapper.insert(company);
-        if (updated < 1) {
-            return "FAIL";
-        } else{
-          throw new GlobalException("测试回滚");
-        }
-        // return "SUCCESS";
+        return updated;
     }
 
 }
