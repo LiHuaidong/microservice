@@ -1,4 +1,4 @@
-package hdli.observer;
+package hdli.behavioural.observer;
 
 interface Subject {
 

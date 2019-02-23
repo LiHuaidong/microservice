@@ -1,4 +1,4 @@
-package hdli.observer;
+package hdli.behavioural.observer;
 
 import java.util.List;
 

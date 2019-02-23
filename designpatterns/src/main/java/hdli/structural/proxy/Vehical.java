@@ -1,4 +1,4 @@
-package hdli.proxy;
+package hdli.structural.proxy;
 
 /**
  * @Description

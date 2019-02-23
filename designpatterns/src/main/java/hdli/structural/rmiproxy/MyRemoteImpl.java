@@ -1,4 +1,4 @@
-package hdli.rmiproxy;
+package hdli.structural.rmiproxy;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;

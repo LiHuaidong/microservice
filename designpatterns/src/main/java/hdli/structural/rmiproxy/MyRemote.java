@@ -1,4 +1,4 @@
-package hdli.rmiproxy;
+package hdli.structural.rmiproxy;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

@@ -1,4 +1,4 @@
-package hdli.proxy;
+package hdli.structural.proxy;
 
 import java.lang.reflect.Proxy;
 
