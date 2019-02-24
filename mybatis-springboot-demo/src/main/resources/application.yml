@@ -3,9 +3,9 @@ spring:
     name: mybatis-springboot-demo
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://10.202.44.200:3308/atp?tinyInt1isBit=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
-    username: atp
-    password: 'atp#pwd789'
+    url: jdbc:mysql://172.16.255.139:3306/study
+    username: root
+    password: '123456'
     hikari:
       max-lifetime: 1765000
       maximum-pool-size: 20
