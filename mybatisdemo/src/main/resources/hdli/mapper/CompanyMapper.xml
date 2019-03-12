@@ -178,31 +178,24 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
 
-  <resultMap id="CompanyResultMap" type="hdli.po.Company">
+  <resultMap id="CompanyResultMap" type="hdli.model.CompanyModel">
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="NAME" property="name" jdbcType="VARCHAR" />
     <result column="TYPE" property="type" jdbcType="VARCHAR" />
-    <collection property="employeeList" column="employeee_id" select="selectCommentsByBlog" ofType="Employee">
-      <id property="id" column="id"/>
-      <result property="name" column="name"/>
-    </collection>
+    <collection property="employeeList" column="ID" select="getEmployeeList" />
   </resultMap>
 
-  <resultMap id="CompanyResultMap" type="hdli.po.Company">
+  <resultMap id="EmployeeResultMap" type="hdli.model.EmployeeModel">
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="NAME" property="name" jdbcType="VARCHAR" />
-    <result column="TYPE" property="type" jdbcType="VARCHAR" />
-    <collection property="employeeList" column="employeee_id" select="selectCommentsByBlog" ofType="Employee">
-      <id property="id" column="id"/>
-      <result property="name" column="name"/>
-    </collection>
+    <result column="COMPANY_ID" property="companyId" jdbcType="INTEGER" />
   </resultMap>
 
-  <select id="selectCompanyWithEmployee" parameterType="integer" resultMap="CompanyWithEmployeeResultMap">
-
+  <select id="getCompanyWithEmployee" parameterType="java.lang.Integer" resultMap="CompanyResultMap">
+    select ID, NAME, TYPE from company where ID = #{id}
   </select>
 
-  <select id="selectEmployeeByCompanyId" parameterType="integer" resultMap="CompanyWithEmployeeResultMap">
-
+  <select id="getEmployeeList" parameterType="java.lang.Integer" resultMap="EmployeeResultMap">
+    select ID, NAME, COMPANY_ID from employee where company_id = #{id}
   </select>
 </mapper>

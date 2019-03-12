@@ -1,8 +1,5 @@
 package hdli.sample;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @Description
  * @Author: Lihuaidong
@@ -10,6 +7,11 @@ import java.util.Map;
  */
 public class MapSample {
 	public static void main(String... args) {
-		Map map = new HashMap<String, Object>();
+//		Map map = new HashMap<String, Object>();
+		String test = "http://localhost:8080/mobilemicroservice/leguer/login.shtml";
+
+		int index = test.indexOf("mobilemicroservice");
+		String serviceUrl = test.substring(test.indexOf("mobilemicroservice"), test.length()).replace("mobilemicroservice", "");
+		System.out.println("serviceUrl = [" + serviceUrl + "]");
 	}
 }
