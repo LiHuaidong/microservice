@@ -177,4 +177,8 @@
       COMPANY_ID = #{companyId,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectEmployeeList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select ID, NAME, COMPANY_ID from employee where name regexp #{name};
+  </select>
 </mapper>
