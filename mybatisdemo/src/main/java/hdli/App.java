@@ -1,6 +1,8 @@
 package hdli;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import hdli.mapper.CompanyMapper;
 import hdli.mapper.EmployeeMapper;
 import hdli.model.CompanyModel;
@@ -54,19 +56,20 @@ public class App {
 //                }
 //            }
 
-//            CompanyExample example = new CompanyExample();
-//            example.setDistinct(true);
-//            CompanyExample.Criteria criteria = example.createCriteria();
-//            criteria.andNameEqualTo("lihuaidong");
-//            List<Company> companyList = companyMapper.selectByExample(example);
-//            if(companyList != null && companyList.size() > 0) {
-//                for(Company company : companyList) {
-//                    System.out.println("company = [" + company.getName() + "]");
-//                }
-//            }
-            PageHelper.startPage(1, 2);
-            List<Employee> employeeList = employeeMapper.selectEmployeeList("li");
-            System.out.println(employeeList.size());
+            CompanyExample example = new CompanyExample();
+            example.setDistinct(true);
+            CompanyExample.Criteria criteria = example.createCriteria();
+            criteria.andNameEqualTo("lihuaidong");
+            List<Company> companyList = companyMapper.selectByExample(example);
+            if(companyList != null && companyList.size() > 0) {
+                for(Company company : companyList) {
+                    System.out.println("company = [" + company.getName() + "]");
+                }
+            }
+//            Page<Employee> page = PageHelper.startPage(1, 2);
+//            employeeMapper.selectEmployeeList("li");
+//            PageInfo<Employee> info = new PageInfo<Employee>(page);
+//            System.out.println(info.getPages());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SQLException e) {
