@@ -3,21 +3,37 @@ spring:
     name: stream-provider
   cloud:
     stream:
-      binders:
-        defaultRabbit:
-          type: rabbit
-          environment:
-            spring:
-              rabbitmq:
-                address: rabbit-server
-                username: guest
-                password: guest
-                virtual-host: /
+      rabbit:
+        host: localhost
+        port: 5672
+        username: guest
+        password: guest
       bindings:
-        output:
-          destination: studyExchange
+        input:
+          destination: wdtest_
           content-type: application/json
-          binder: defaultRabbit
+          group: average
+        input3:
+          destination: wdtest_
+          content-type: application/json
+          group: average
+        input1:
+          destination: wdtest_
+          content-type: application/json
+          group: average
+        input2:
+          destination: wdtest_
+          content-type: application/json
+          group: average
+        input11:
+          destination: wdtest_
+          content-type: application/json
+          group: average
+        input22:
+          destination: wdtest_
+          content-type: application/json
+          group: average
+
 
 eureka:
   client:
