@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: sit
+
+server:
+  port: 8231
+
+eureka:
+  client:
+    enabled: true
+
+logging:
+  file: ${spring.application.name}
+  level:
+    ROOT: INFO
+
+---
+spring:
+  profiles: native
+  cloud:
+    config:
+      server:
+          native:
+            searchLocations: file:///D:/microservice/config/{application}
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1111/eureka/
+
+---
+spring:
+  profiles: sit
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/LiHuaidong/config-repo.git
+#          search-paths: config-repo/*
+          username: hdli168@163.com
+          password: rnikjahh26
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1111/eureka/
