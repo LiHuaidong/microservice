@@ -29,7 +29,8 @@ public interface CustomSink {
 	@Input(INPUT1)
 	SubscribableChannel input1();
 
-	@Input(INPUT2) SubscribableChannel input2();
+	@Input(INPUT2)
+	SubscribableChannel input2();
 
 
 }

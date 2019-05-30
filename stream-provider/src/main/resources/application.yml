@@ -14,35 +14,46 @@ spring:
           content-type: application/json
           group: average
         input3:
-          destination: wdtest_
+          destination: wdtest0
           content-type: application/json
           group: average
+        input0:
+          destination: wdtest0
+          content-type: application/json
+          group: hdfsWrite
         input1:
-          destination: wdtest_
+          destination: wdtest1
           content-type: application/json
           group: average
         input2:
-          destination: wdtest_
+          destination: wdtest2
           content-type: application/json
           group: average
         input11:
-          destination: wdtest_
+          destination: wdtest11
           content-type: application/json
           group: average
         input22:
-          destination: wdtest_
+          destination: wdtest22
           content-type: application/json
           group: average
-
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:1111/eureka/
-  instance:
-    lease-renewal-interval-in-seconds: 2 # \u8BBE\u7F6E\u5FC3\u8DF3\u7684\u65F6\u95F4\u95F4\u9694\uFF08\u9ED8\u8BA4\u662F30\u79D2\uFF09
-    lease-expiration-duration-in-seconds: 5 # \u5982\u679C\u73B0\u5728\u8D85\u8FC7\u4E865\u79D2\u7684\u95F4\u9694\uFF08\u9ED8\u8BA4\u662F90\u79D2\uFF09
-    instance-id: send-8401.com  # \u5728\u4FE1\u606F\u5217\u8868\u65F6\u663E\u793A\u4E3B\u673A\u540D\u79F0
-    prefer-ip-address: true     # \u8BBF\u95EE\u7684\u8DEF\u5F84\u53D8\u4E3AIP\u5730\u5740
+        output:
+          destination: wdtest_
+          content-type: application/json
+        output3:
+          destination: wdtest0
+          content-type: application/json
+        output1:
+          destination: wdtest1
+          content-type: application/json
+        output2:
+          destination: wdtest2
+          content-type: application/json
+        output11:
+          destination: wdtest11
+          content-type: application/json
+        output22:
+          destination: wdtest22
+          content-type: application/json
 server:
   port: 8401
