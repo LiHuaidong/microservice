@@ -89,4 +89,6 @@ public class BinarySearchTree<T> {
         return findMax(t.right);
     }
 
+    public void insert(){}
+
 }
