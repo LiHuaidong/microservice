@@ -6,8 +6,8 @@ public class BinarySearchTree<T> {
 
     private static class BinaryNode<T>{
         T element;
-        BinaryNode left;
-        BinaryNode right;
+        BinaryNode<T> left;
+        BinaryNode<T> right;
 
         BinaryNode(T element){
             this.element = element;
@@ -89,6 +89,55 @@ public class BinarySearchTree<T> {
         return findMax(t.right);
     }
 
-    public void insert(){}
+    public void insert(T x) {}
+
+    public BinaryNode<T> insert(T x, BinaryNode<T> t) {
+        if (t == null) {
+            return new BinaryNode<T>(x, null, null);
+        }
+
+        int compareResult = myCompare(x, t.element);
+
+        if (compareResult < 0) {
+            t.left = insert(x, t.left);
+        }
+        else if(compareResult > 0) {
+            t.right = insert(x, t.right);
+        }
+        return t;
+    }
+
+    public BinaryNode<T> remove(T x, BinaryNode<T> t) {
+        if (t == null) {
+            return null;
+        }
+
+        int compareResult = myCompare(x, t.element);
+        if (compareResult < 0) {
+            t.left = remove(x, t.left);
+        } else if (compareResult > 0) {
+            t.right = remove(x, t.right);
+        } else {
+            if (t.left != null && t.right != null) { // 2个孩子的情形
+                t.element = findMin(t.right).element;
+                t.right = remove(t.element, t.right);
+            } else {
+                t = t.left != null ? t.left : t.right;
+            }
+        }
+
+        return t;
+    }
+
+    private void printTree(BinaryNode<T> t){
+        if(t == null) {
+            return;
+        }
+
+        System.out.print(t.element);
+
+        printTree(t.left);
+        printTree(t.right);
+    }
 
 }
