@@ -2,7 +2,7 @@ spring:
   application:
     name: config-server
   profiles:
-    active: sit
+    active: native
 
 server:
   port: 8231
@@ -12,7 +12,7 @@ eureka:
     enabled: true
 
 logging:
-  file: ${spring.application.name}
+  file: ${spring.application.name}.log
   level:
     ROOT: INFO
 
