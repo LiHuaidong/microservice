@@ -1,5 +1,7 @@
 package hdli;
 
+import java.util.Arrays;
+
 /**
  * @Description
  * @Author: Lihuaidong
@@ -9,69 +11,36 @@ public class QuickSort {
 
 	public static void main(String[] args) {
 		int[] array = new int[] { 23, 33, 11, 2, 11, 3, 12, 3, 12, 11, 0, 33, 44, 12 };
+		System.out.println("starting array = [" + Arrays.toString(array) + "]");
 
-		for (int data : array) {
-			System.out.print(data + " ");
-		}
-		System.out.println();
+		quickSort(array, 0, array.length - 1);
 
-		partitionSort2(array, 0, array.length - 1);
+		System.out.println("ending array = [" + Arrays.toString(array) + "]");
 	}
 
-	private static void partitionSort1(int[] array, int start, int end) {
+	private static void quickSort(int[] array, int start, int end) {
 		int left = start;
 		int right = end;
-		int tip = array[right];
+		int tip = array[left];
 		while (left != right) {
-			for (; left < right && array[left] <= tip; left++)
-				;
-			swapByIndex(array, left, right);
+			while (right > left && array[right] >= tip) {
+				right--;
+			}
+			array[left] = array[right];
 
-			for (; right > left && array[right] >= tip; right--)
-				;
-			swapByIndex(array, left, right);
+			while (left < right && array[left] <= tip) {
+				left++;
+			}
+			array[right] = array[left];
 		}
-		if (left > start)
-			partitionSort1(array, start, left - 1);
-		if (left < end)
-			partitionSort1(array, left + 1, end);
+		array[left] = tip;
+
+		if (left > start) {
+			quickSort(array, start, left - 1);
+		}
+		if (left < end) {
+			quickSort(array, left + 1, end);
+		}
 	}
 
-	private static void partitionSort2(int[] array, int start, int end) {
-		int left = start;
-		int right = end;
-		int tip = array[right];
-		while (left != right) {
-			for (; left < right && array[left] <= tip; left++)
-				;
-			for (; right > left && array[right] >= tip; right--)
-				;
-			swapByIndex(array, left, right);
-		}
-		swap(array, left, tip);
-
-		if (left > start)
-			partitionSort2(array, start, left - 1);
-		if (left < end)
-			partitionSort2(array, left + 1, end);
-	}
-
-	public static void swapByIndex(int[] array, int leftIndex, int rightIndex) {
-		int tmp = array[leftIndex];
-		array[leftIndex] = array[rightIndex];
-		array[rightIndex] = tmp;
-
-		for (int data : array) {
-			System.out.print(data + " ");
-		}
-		System.out.println();
-	}
-
-	public static void swap(int[] array, int leftIndex, int tip) {
-		array[leftIndex] = tip;
-		for (int data : array) {
-			System.out.print(data + " ");
-		}
-		System.out.println();
-	}
 }
