@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Author: Lihuaidong
  * @Date: Created at 15:54 2019/2/19
  */
-@ControllerAdvice
+@ControllerAdvice("hdli.controller")
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(value = Exception.class)
