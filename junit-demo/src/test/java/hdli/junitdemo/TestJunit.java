@@ -1,7 +1,8 @@
 package hdli.junitdemo;
 
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @Description
@@ -16,5 +17,24 @@ public class TestJunit {
 	@Test
 	public void testPrintMessage() {
 		assertEquals(message,messageUtil.printMessage());
+	}
+
+	@Test
+	public void testif() {
+		int first = 2;
+		int second = 2;
+
+		int compareResult = first == second ? 0 : first > second ? 1 : -1;
+
+		compareResult = -1;
+		if(compareResult > 0) {
+			System.out.println(">");
+		} else if(compareResult < 0) {
+			System.out.println("<");
+		} else if(true) {
+			System.out.println("executed true");
+		} else {
+			System.out.println("executed false");
+		}
 	}
 }
