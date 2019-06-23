@@ -1,5 +1,7 @@
 package hdli;
 
+import java.util.Arrays;
+
 /**
  * @Description
  * @Author: Lihuaidong
@@ -9,24 +11,24 @@ public class InsertionSort {
 
 	public static void main(String[] args) {
 		int[] array = new int[] { 12, 23, 33, 11, 2, 11, 3, 12, 3, 12, 11, 33, 44, 1 };
-		int length = array.length;
-		int tmp = 0;
-		for (int i = 1; i < length; i++) {
-			tmp = array[i];
+		System.out.println("starting array = [" + Arrays.toString(array) + "]");
+		insertionSort(array);
+		System.out.println("ending array = [" + Arrays.toString(array) + "]");
+	}
+
+	public static void insertionSort(int a[]) {
+		int len = a.length;
+		for (int i = 1; i < len; i++) {
+			int tip = a[i];
 			int j = i;
-
-			while (j > 0 && tmp < array[j - 1]) {
-				array[j] = array[--j];
+			while (j > 0 && tip < a[j-1]) {
+				a[j] = a[j-1];
+				j--;
 			}
-			array[j] = tmp;
-			printArray(array);
+			if (j != i) {
+				a[j] = tip;
+			}
 		}
 	}
 
-	private static void printArray(int[] array) {
-		for (int data : array) {
-			System.out.print(data + " ");
-		}
-		System.out.println();
-	}
 }

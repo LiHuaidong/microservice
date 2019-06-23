@@ -1,0 +1,42 @@
+mysql的安装 mysql安装完自带的几个库的使用  centos 7、6上安装  公共   
+
+mysql索引原理  林仕增
+
+mysql的存储引擎  mysql的各种锁原理及其对应语句  + 硬盘存储  陈相延
+
+mysql的事务   mysql的常见函数  张武斌
+
+mysql性能分析   卓圆 李鹏
+
+数据库设计原则——范式&反范式   李怀东
+
+apigateway-app
+
+ 10.203.50.8
+ 10.203.50.7
+ 
+ 10.203.50.12:8080 , 10.203.50.11:8080
+ 
+ 
+select count(1) from air_available_cabin           ;
+select count(1) from air_cabin_peak_warn           ;
+select count(1) from air_capacity_main             ;
+select count(1) from air_contract                  ;
+select count(1) from air_contract_and_capacity     ;
+select count(1) from air_supplier_info             ;
+select count(1) from ares_cabin_booking            ;
+select count(1) from ares_cabin_price              ;
+select count(1) from ares_cabin_price_detail       ;
+select count(1) from ares_empty_cabin              ;
+select count(1) from ares_flight_schedule          ;
+select count(1) from ares_pick_exception           ;
+select count(1) from ares_pick_task                ;
+select count(1) from ares_send_exception           ;
+select count(1) from ares_send_task                ;
+select count(1) from ares_send_task_bill           ;
+select count(1) from ares_send_task_customer       ;
+select count(1) from tm_air_plane_type             ;
+select count(1) from tm_air_supplier               ;
+select count(1) from tm_ais_peak_period            ;
+select count(1) from tm_ais_peak_type              ;
+select count(1) from ts_department                 ;

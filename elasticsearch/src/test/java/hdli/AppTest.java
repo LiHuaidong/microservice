@@ -2,6 +2,7 @@ package hdli;
 
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;

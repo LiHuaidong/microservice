@@ -1,5 +1,7 @@
 package hdli;
 
+import java.util.Arrays;
+
 /**
  * Hello world!
  *
@@ -7,28 +9,31 @@ package hdli;
 public class BubbleSort {
     public static void main(String[] args) {
         int[] array = new int[] { 12, 23, 33, 11, 2, 11, 3, 12, 3, 12, 11, 33, 44, 1 };
-        int length = array.length;
-        for (int i = 0; i < length - 1; i++) { // 此处减1是因为两两比较只需要n-1次比较即可判断出大小
-            for (int j = 0; j < length - i - 1; j++) { // lenght - i -1 再减1的原因是因为当循环至倒数第2个既可以比较结束
-                int a = array[j];
-                int b = array[j + 1];
-                if (a > b) {
-                    array[j + 1] = a;
-                    array[j] = b;
-                }
-            }
-            printArray(array);
-        }
 
-        int i = 5;
-        System.out.println(--i);
-        System.out.println(i);
+        bubbleSort(array);
     }
 
-    private static void printArray(int[] array) {
-        for (int data : array) {
-            System.out.print(data + " ");
+    public static int[] bubbleSort(int[] array) {
+        if (array == null) {
+            return null;
         }
-        System.out.println();
+        int length = array.length;
+        System.out.println("length = [" + length + "]");
+        for (int i = 0; i < length - 1; i++) {
+            boolean isSwap = false;
+            for (int j = 0; j < length - i - 1; j++) {
+                if (array[j] > array[j + 1]) {
+                    int tmp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = tmp;
+                    isSwap = true;
+                }
+            }
+            if (!isSwap) {
+                break;
+            }
+            System.out.println(i + " array = [" + Arrays.toString(array) + "]");
+        }
+        return array;
     }
 }

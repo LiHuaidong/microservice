@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: stream-provider
+  cloud:
+    stream:
+      rabbit:
+        host: localhost
+        port: 5672
+        username: guest
+        password: guest
+      bindings:
+        input:
+          destination: wdtest_
+          content-type: application/json
+          group: average
+        input3:
+          destination: wdtest0
+          content-type: application/json
+          group: average
+        input0:
+          destination: wdtest0
+          content-type: application/json
+          group: hdfsWrite
+        input1:
+          destination: wdtest1
+          content-type: application/json
+          group: average
+        input2:
+          destination: wdtest2
+          content-type: application/json
+          group: average
+        input11:
+          destination: wdtest11
+          content-type: application/json
+          group: average
+        input22:
+          destination: wdtest22
+          content-type: application/json
+          group: average
+        output:
+          destination: wdtest_
+          content-type: application/json
+        output3:
+          destination: wdtest0
+          content-type: application/json
+        output1:
+          destination: wdtest1
+          content-type: application/json
+        output2:
+          destination: wdtest2
+          content-type: application/json
+        output11:
+          destination: wdtest11
+          content-type: application/json
+        output22:
+          destination: wdtest22
+          content-type: application/json
+server:
+  port: 8401

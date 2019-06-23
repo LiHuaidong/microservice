@@ -1,11 +1,18 @@
 package hdli;
 
+import java.util.Arrays;
+
 public class SelectionSort {
 
     public static void main(String[] args) {
         int[] array = new int[] { 12, 23, 33, 11, 2, 11, 3, 12, 3, 12, 11, 33, 44, 1 };
+        System.out.println("starting array = [" + Arrays.toString(array) + "]");
+        selectionSort(array);
+        System.out.println("ending array = [" + Arrays.toString(array) + "]");
+    }
+
+    private static void selectionSort(int[] array) {
         int length = array.length;
-        printArray(array);
         int min = 0;
         for (int i = 0; i < length - 1; i++) {
             min = i;
@@ -14,21 +21,15 @@ public class SelectionSort {
                     min = j;
                 }
             }
-            swapByIndex(array, i, min);
-            printArray(array);
+            if(i != min) {
+                swap(array, i, min);
+            }
         }
     }
 
-    private static void printArray(int[] array) {
-        for (int data : array) {
-            System.out.print(data + " ");
-        }
-        System.out.println();
-    }
-
-    public static void swapByIndex(int[] array, int leftIndex, int rightIndex) {
-        int tmp = array[leftIndex];
-        array[leftIndex] = array[rightIndex];
-        array[rightIndex] = tmp;
+    public static void swap(int[] array, int before, int after) {
+        int tmp = array[before];
+        array[before] = array[after];
+        array[after] = tmp;
     }
 }

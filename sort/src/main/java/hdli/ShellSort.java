@@ -1,5 +1,7 @@
 package hdli;
 
+import java.util.Arrays;
+
 /**
  * @Description
  * @Author: Lihuaidong
@@ -9,28 +11,35 @@ public class ShellSort {
 
 	public static void main(String[] args) {
 		int[] array = new int[] { 12, 23, 33, 11, 2, 11, 3, 12, 3, 12, 11, 33, 44, 1 };
-		int length = array.length;
 
-		int incrementNum = length / 2;
-		while(incrementNum >= 1) {
-			for(int i=0; i<length; i++) {
-				for(int j=i; j<length-incrementNum; j+=incrementNum) {
-					if(array[j] > array[j + incrementNum]) {
-						int temp = array[j];
-						array[j] = array[j + incrementNum];
-						array[j + incrementNum] = temp;
-					}
+		System.out.println("starting array = [" + Arrays.toString(array) + "]");
+
+		shellSort(array);
+
+		System.out.println("ending array = [" + Arrays.toString(array) + "]");
+	}
+
+	public static void shellSort(int[] a) {
+		int len = a.length;
+		int gap = 0;
+		while(gap < len) {
+			gap = 3*gap + 1;
+		}
+
+		while(gap > 0) {
+			for(int i=gap; i<len; i++) {
+				int tmp = a[i];
+				int j = i;
+				while(j>=gap && tmp < a[j-gap]) {
+					a[j] = a[j-gap];
+					j-=gap;
+				}
+				if(j != i) {
+					a[j] = tmp;
 				}
 			}
-			incrementNum = incrementNum/2;
-			printArray(array);
+			gap = (gap - 1) / 3;
 		}
 	}
 
-	private static void printArray(int[] array) {
-		for (int data : array) {
-			System.out.print(data + " ");
-		}
-		System.out.println();
-	}
 }
