@@ -2,6 +2,7 @@ package hdli;
 
 import static org.junit.Assert.assertTrue;
 
+import hdli.creation.EnumSingleton;
 import org.junit.Test;
 
 /**
@@ -17,4 +18,12 @@ public class AppTest
     {
         assertTrue( true );
     }
+
+    @Test
+    public void createSingleton() {
+        // Singleton.getSingleton();
+        EnumSingleton.Instance.sayHello();
+    }
+
+
 }
