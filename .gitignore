@@ -1,5 +1,7 @@
 HELP.md
 /target/
+/ispp-zp-spark/
+/IflytekFlume/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

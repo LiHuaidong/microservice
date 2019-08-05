@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_112" class="java.beans.XMLDecoder">
+ <object class="org.gjt.jclasslib.browser.config.BrowserConfig" id="BrowserConfig0">
+  <void property="MDIConfig">
+   <object class="org.gjt.jclasslib.mdi.MDIConfig">
+    <void property="activeFrameDesc">
+     <object class="org.gjt.jclasslib.mdi.MDIConfig$InternalFrameDesc" id="MDIConfig$InternalFrameDesc0">
+      <void property="className">
+       <string>org.gjt.jclasslib.browser.BrowserInternalFrame</string>
+      </void>
+      <void property="height">
+       <int>400</int>
+      </void>
+      <void property="initParam">
+       <object class="org.gjt.jclasslib.browser.config.window.WindowState">
+        <void property="fileName">
+         <string>E:\research\microservice\tree\target\classes\hdli\tree\BinarySearchTree.class</string>
+        </void>
+       </object>
+      </void>
+      <void property="maximized">
+       <boolean>true</boolean>
+      </void>
+      <void property="width">
+       <int>600</int>
+      </void>
+      <void property="x">
+       <int>132</int>
+      </void>
+      <void property="y">
+       <int>132</int>
+      </void>
+     </object>
+    </void>
+    <void property="internalFrameDescs">
+     <object class="java.util.ArrayList">
+      <void method="add">
+       <object class="org.gjt.jclasslib.mdi.MDIConfig$InternalFrameDesc">
+        <void property="className">
+         <string>org.gjt.jclasslib.browser.BrowserInternalFrame</string>
+        </void>
+        <void property="height">
+         <int>400</int>
+        </void>
+        <void property="initParam">
+         <object class="org.gjt.jclasslib.browser.config.window.WindowState">
+          <void property="fileName">
+           <string>E:\research\microservice\aop-demo\target\classes\hdli\aopdemo\AspectjLog.class</string>
+          </void>
+         </object>
+        </void>
+        <void property="maximized">
+         <boolean>true</boolean>
+        </void>
+        <void property="width">
+         <int>600</int>
+        </void>
+        <void property="x">
+         <int>110</int>
+        </void>
+        <void property="y">
+         <int>110</int>
+        </void>
+       </object>
+      </void>
+      <void method="add">
+       <object idref="MDIConfig$InternalFrameDesc0"/>
+      </void>
+     </object>
+    </void>
+   </object>
+  </void>
+  <void property="classpath">
+   <void method="add">
+    <object class="org.gjt.jclasslib.browser.config.classpath.ClasspathArchiveEntry">
+     <void property="fileName">
+      <string>C:\Program%20Files\Java\jre1.8.0_112\lib\rt.jar</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.gjt.jclasslib.browser.config.classpath.ClasspathDirectoryEntry">
+     <void property="fileName">
+      <string>E:\research\microservice\aop-demo\target\classes</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.gjt.jclasslib.browser.config.classpath.ClasspathDirectoryEntry">
+     <void property="fileName">
+      <string>E:\research\microservice\tree\target\classes</string>
+     </void>
+    </object>
+   </void>
+  </void>
+ </object>
+</java>

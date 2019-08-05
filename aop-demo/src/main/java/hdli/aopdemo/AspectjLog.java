@@ -11,9 +11,13 @@ import org.springframework.stereotype.Component;
 @Order(1)
 @Aspect
 @Component
-public class AspectjLog {
+public class AspectjLog implements Runnable {
 
     private Logger logger = LoggerFactory.getLogger(AspectjLog.class);
+
+    public static int abc = 123;
+
+    public static final int abc_constant = 123;
 
     @Pointcut("execution(* hdli.service.impl.AspectService.*(..))")
     public void logAop(){
@@ -36,7 +40,7 @@ public class AspectjLog {
     }
 
     @AfterThrowing("logAop() && args(email)")
-    public void logAfterThrow(String email) {
+    public void logAfterThrow(String email) throws RuntimeException {
         logger.info("异常通知AfterThrowing>>{}", email);
     }
 
@@ -50,8 +54,14 @@ public class AspectjLog {
         } catch (Throwable throwable) {
             logger.info("异常处理>>>>{}", email);
             throwable.printStackTrace();
+        } finally {
+            logger.info("test finally");
         }
         logger.info("自定义后置通知After>>>{}", email);
     }
 
+    @Override
+    public void run() {
+        System.out.println(12);
+    }
 }
