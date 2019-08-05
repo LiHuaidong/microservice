@@ -1,7 +1,10 @@
-package hdli.Miscellaneous.graph;
+package hdli.Miscellaneous.graph2;
 
 import java.util.*;
 import java.io.*;
+
+import hdli.DataStructures.*;
+import hdli.DataStructures.LinkedList;
 
 class Vertex {
 	String name;   // Vertex name
@@ -21,21 +24,47 @@ class Vertex {
 	}
 }
 
-class Graph {
+class MapEntry implements Hashable {
+	String vertexName;
+	Vertex storedVertex;
+
+	public MapEntry(String name) {
+		vertexName = new String(name);
+		storedVertex = null;
+	}
+
+	public int hash(int tableSize) {
+		return QuadraticProbingHashTable.hash(vertexName, tableSize);
+	}
+
+	public boolean equals(Object rhs) {
+		return rhs instanceof MapEntry && vertexName.equals(((MapEntry) rhs).vertexName);
+	}
+}
+
+// Of course, this file should be Graph.java, but there's already
+// version 1. So this will give an error if compiled at the same time
+// as Graph.java.
+public class Graph {
 	public static final int INFINITY = Integer.MAX_VALUE;
-	private HashMap vertexMap = new HashMap();    // Maps vertices to internal Vertex
+	private QuadraticProbingHashTable vertexMap = new QuadraticProbingHashTable();    // Maps vertices to internal Vertex
+	private LinkedList allVertices = new LinkedList();  // List of vertices
+	int numVertices = 0;
 
 	public void addEdge(String sourceName, String destName) {
 		Vertex v = getVertex(sourceName);
 		Vertex w = getVertex(destName);
-		v.adj.add(w);
+		v.adj.insert(w, v.adj.zeroth());
 	}
 
 	public void printPath(String destName) throws NoSuchElementException {
-		Vertex w = (Vertex) vertexMap.get(destName);
-		if (w == null)
+		MapEntry match = (MapEntry) vertexMap.find(new MapEntry(destName));
+
+		if (match == null)
 			throw new NoSuchElementException("Destination vertex not found");
-		else if (w.dist == INFINITY)
+
+		Vertex w = match.storedVertex;
+		if (w.dist == INFINITY)
 			System.out.println(destName + " is unreachable");
 		else {
 			printPath(w);
@@ -45,13 +74,21 @@ class Graph {
 
 	// If vertexName is not present, add it to vertexMap.
 	// In either case, return the Vertex.
+	// entry is made global to avoid repeated calls to new.
+	MapEntry entry = new MapEntry("");
+
 	private Vertex getVertex(String vertexName) {
-		Vertex v = (Vertex) vertexMap.get(vertexName);
-		if (v == null) {
-			v = new Vertex(vertexName);
-			vertexMap.put(vertexName, v);
+		entry.vertexName = vertexName;
+		MapEntry match = (MapEntry) vertexMap.find(entry);
+
+		if (match == null) {
+			match = new MapEntry(vertexName);
+			match.storedVertex = new Vertex(vertexName);
+			allVertices.insert(match.storedVertex, allVertices.zeroth());
+			numVertices++;
+			vertexMap.insert(match);
 		}
-		return v;
+		return match.storedVertex;
 	}
 
 	private void printPath(Vertex dest) {
@@ -63,32 +100,37 @@ class Graph {
 	}
 
 	private void clearAll() {
-		for (Iterator itr = vertexMap.values().iterator(); itr.hasNext(); )
-			((Vertex) itr.next()).reset();
+		for (LinkedListItr itr = allVertices.first(); !itr.isPastEnd(); itr.advance())
+			((Vertex) itr.retrieve()).reset();
 	}
 
 	public void unweighted(String startName) throws NoSuchElementException {
 		clearAll();
 
-		Vertex start = (Vertex) vertexMap.get(startName);
-		if (start == null)
+		MapEntry match = (MapEntry) vertexMap.find(new MapEntry(startName));
+		if (match == null)
 			throw new NoSuchElementException("Start vertex not found");
 
-		LinkedList q = new LinkedList();
-		q.addLast(start);
-		start.dist = 0;
+		try {
+			Vertex start = match.storedVertex;
+			QueueAr q = new QueueAr(numVertices);
+			q.enqueue(start);
+			start.dist = 0;
 
-		while (!q.isEmpty()) {
-			Vertex v = (Vertex) q.removeFirst();
+			while (!q.isEmpty()) {
+				Vertex v = (Vertex) q.dequeue();
 
-			for (Iterator itr = v.adj.iterator(); itr.hasNext(); ) {
-				Vertex w = (Vertex) itr.next();
-				if (w.dist == INFINITY) {
-					w.dist = v.dist + 1;
-					w.path = v;
-					q.addLast(w);
+				for (LinkedListItr itr = v.adj.first(); !itr.isPastEnd(); itr.advance()) {
+					Vertex w = (Vertex) itr.retrieve();
+					if (w.dist == INFINITY) {
+						w.dist = v.dist + 1;
+						w.path = v;
+						q.enqueue(w);
+					}
 				}
 			}
+		} catch (Overflow e) {
+			System.out.println("Queue Capacity exceeded unexpectedly!");
 		}
 	}
 
