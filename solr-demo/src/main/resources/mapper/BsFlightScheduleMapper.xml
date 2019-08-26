@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hdli.solrdemo.mapper.BsFlightScheduleMapper" >
+  <resultMap id="BaseResultMap" type="hdli.solrdemo.po.BsFlightSchedule" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="BSFS_SERIAL_NUMBER" property="bsfsSerialNumber" jdbcType="VARCHAR" />
+    <result column="BSFS_UPDATE_DATE" property="bsfsUpdateDate" jdbcType="DATE" />
+    <result column="BSFS_FLIGHT_TYPE" property="bsfsFlightType" jdbcType="VARCHAR" />
+    <result column="BSFS_AIRLINECODE" property="bsfsAirlinecode" jdbcType="VARCHAR" />
+    <result column="BSFS_TRANSPORTNAME" property="bsfsTransportname" jdbcType="VARCHAR" />
+    <result column="BSFS_STARTSTATION_CODE" property="bsfsStartstationCode" jdbcType="VARCHAR" />
+    <result column="BSFS_ENDSTATION_CODE" property="bsfsEndstationCode" jdbcType="VARCHAR" />
+    <result column="BSFS_STARTCITY_NAME" property="bsfsStartcityName" jdbcType="VARCHAR" />
+    <result column="BSFS_ENDCITY_NAME" property="bsfsEndcityName" jdbcType="VARCHAR" />
+    <result column="BSFS_DEPARTURE_TIME" property="bsfsDepartureTime" jdbcType="VARCHAR" />
+    <result column="BSFS_ARRIVAL_TIME" property="bsfsArrivalTime" jdbcType="VARCHAR" />
+    <result column="BSFS_STOP_SIGHN" property="bsfsStopSighn" jdbcType="VARCHAR" />
+    <result column="BSFS_SHARE_SIGHN" property="bsfsShareSighn" jdbcType="VARCHAR" />
+    <result column="BSFS_SCHEDULE" property="bsfsSchedule" jdbcType="VARCHAR" />
+    <result column="BSFS_AIRCRFTTYPE" property="bsfsAircrfttype" jdbcType="VARCHAR" />
+    <result column="BSFS_MILEAGE" property="bsfsMileage" jdbcType="VARCHAR" />
+    <result column="BSFS_FLIGHT_MILEAGE" property="bsfsFlightMileage" jdbcType="VARCHAR" />
+    <result column="BSFS_PUNCTUALITY_RATE" property="bsfsPunctualityRate" jdbcType="VARCHAR" />
+    <result column="BSFS_EFFECTIVE_DATE" property="bsfsEffectiveDate" jdbcType="TIMESTAMP" />
+    <result column="BSFS_EXPIRATION_DATE" property="bsfsExpirationDate" jdbcType="TIMESTAMP" />
+    <result column="BSFS_ISHOTROUTE" property="bsfsIshotroute" jdbcType="VARCHAR" />
+    <result column="REC_STATUS" property="recStatus" jdbcType="INTEGER" />
+    <result column="REC_VER" property="recVer" jdbcType="INTEGER" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+    <result column="MODIFY_NAME" property="modifyName" jdbcType="VARCHAR" />
+    <result column="MODIFY_TIME" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="SUBSTR1" property="substr1" jdbcType="VARCHAR" />
+    <result column="SUBSTR2" property="substr2" jdbcType="VARCHAR" />
+    <result column="SUBdecima1" property="subdecima1" jdbcType="DECIMAL" />
+    <result column="SUBdecima2" property="subdecima2" jdbcType="DECIMAL" />
+    <result column="SUBDATE1" property="subdate1" jdbcType="TIMESTAMP" />
+    <result column="SUBDATE2" property="subdate2" jdbcType="TIMESTAMP" />
+    <result column="BSFS_STATUS_ZH" property="bsfsStatusZh" jdbcType="VARCHAR" />
+    <result column="bsfs_status_en" property="bsfsStatusEn" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, BSFS_SERIAL_NUMBER, BSFS_UPDATE_DATE, BSFS_FLIGHT_TYPE, BSFS_AIRLINECODE, BSFS_TRANSPORTNAME, 
+    BSFS_STARTSTATION_CODE, BSFS_ENDSTATION_CODE, BSFS_STARTCITY_NAME, BSFS_ENDCITY_NAME, 
+    BSFS_DEPARTURE_TIME, BSFS_ARRIVAL_TIME, BSFS_STOP_SIGHN, BSFS_SHARE_SIGHN, BSFS_SCHEDULE, 
+    BSFS_AIRCRFTTYPE, BSFS_MILEAGE, BSFS_FLIGHT_MILEAGE, BSFS_PUNCTUALITY_RATE, BSFS_EFFECTIVE_DATE, 
+    BSFS_EXPIRATION_DATE, BSFS_ISHOTROUTE, REC_STATUS, REC_VER, CREATOR, CREATE_NAME, 
+    CREATE_TIME, MODIFIER, MODIFY_NAME, MODIFY_TIME, SUBSTR1, SUBSTR2, SUBdecima1, SUBdecima2, 
+    SUBDATE1, SUBDATE2, BSFS_STATUS_ZH, bsfs_status_en
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="hdli.po.BsFlightScheduleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from bs_flight_schedule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from bs_flight_schedule
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from bs_flight_schedule
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="hdli.po.BsFlightScheduleExample" >
+    delete from bs_flight_schedule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="hdli.po.BsFlightSchedule" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bs_flight_schedule (BSFS_SERIAL_NUMBER, BSFS_UPDATE_DATE, BSFS_FLIGHT_TYPE, 
+      BSFS_AIRLINECODE, BSFS_TRANSPORTNAME, BSFS_STARTSTATION_CODE, 
+      BSFS_ENDSTATION_CODE, BSFS_STARTCITY_NAME, 
+      BSFS_ENDCITY_NAME, BSFS_DEPARTURE_TIME, BSFS_ARRIVAL_TIME, 
+      BSFS_STOP_SIGHN, BSFS_SHARE_SIGHN, BSFS_SCHEDULE, 
+      BSFS_AIRCRFTTYPE, BSFS_MILEAGE, BSFS_FLIGHT_MILEAGE, 
+      BSFS_PUNCTUALITY_RATE, BSFS_EFFECTIVE_DATE, 
+      BSFS_EXPIRATION_DATE, BSFS_ISHOTROUTE, REC_STATUS, 
+      REC_VER, CREATOR, CREATE_NAME, 
+      CREATE_TIME, MODIFIER, MODIFY_NAME, 
+      MODIFY_TIME, SUBSTR1, SUBSTR2, 
+      SUBdecima1, SUBdecima2, SUBDATE1, 
+      SUBDATE2, BSFS_STATUS_ZH, bsfs_status_en
+      )
+    values (#{bsfsSerialNumber,jdbcType=VARCHAR}, #{bsfsUpdateDate,jdbcType=DATE}, #{bsfsFlightType,jdbcType=VARCHAR}, 
+      #{bsfsAirlinecode,jdbcType=VARCHAR}, #{bsfsTransportname,jdbcType=VARCHAR}, #{bsfsStartstationCode,jdbcType=VARCHAR}, 
+      #{bsfsEndstationCode,jdbcType=VARCHAR}, #{bsfsStartcityName,jdbcType=VARCHAR}, 
+      #{bsfsEndcityName,jdbcType=VARCHAR}, #{bsfsDepartureTime,jdbcType=VARCHAR}, #{bsfsArrivalTime,jdbcType=VARCHAR}, 
+      #{bsfsStopSighn,jdbcType=VARCHAR}, #{bsfsShareSighn,jdbcType=VARCHAR}, #{bsfsSchedule,jdbcType=VARCHAR}, 
+      #{bsfsAircrfttype,jdbcType=VARCHAR}, #{bsfsMileage,jdbcType=VARCHAR}, #{bsfsFlightMileage,jdbcType=VARCHAR}, 
+      #{bsfsPunctualityRate,jdbcType=VARCHAR}, #{bsfsEffectiveDate,jdbcType=TIMESTAMP}, 
+      #{bsfsExpirationDate,jdbcType=TIMESTAMP}, #{bsfsIshotroute,jdbcType=VARCHAR}, #{recStatus,jdbcType=INTEGER}, 
+      #{recVer,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, #{createName,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifyName,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{substr1,jdbcType=VARCHAR}, #{substr2,jdbcType=VARCHAR}, 
+      #{subdecima1,jdbcType=DECIMAL}, #{subdecima2,jdbcType=DECIMAL}, #{subdate1,jdbcType=TIMESTAMP}, 
+      #{subdate2,jdbcType=TIMESTAMP}, #{bsfsStatusZh,jdbcType=VARCHAR}, #{bsfsStatusEn,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="hdli.po.BsFlightSchedule" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bs_flight_schedule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bsfsSerialNumber != null" >
+        BSFS_SERIAL_NUMBER,
+      </if>
+      <if test="bsfsUpdateDate != null" >
+        BSFS_UPDATE_DATE,
+      </if>
+      <if test="bsfsFlightType != null" >
+        BSFS_FLIGHT_TYPE,
+      </if>
+      <if test="bsfsAirlinecode != null" >
+        BSFS_AIRLINECODE,
+      </if>
+      <if test="bsfsTransportname != null" >
+        BSFS_TRANSPORTNAME,
+      </if>
+      <if test="bsfsStartstationCode != null" >
+        BSFS_STARTSTATION_CODE,
+      </if>
+      <if test="bsfsEndstationCode != null" >
+        BSFS_ENDSTATION_CODE,
+      </if>
+      <if test="bsfsStartcityName != null" >
+        BSFS_STARTCITY_NAME,
+      </if>
+      <if test="bsfsEndcityName != null" >
+        BSFS_ENDCITY_NAME,
+      </if>
+      <if test="bsfsDepartureTime != null" >
+        BSFS_DEPARTURE_TIME,
+      </if>
+      <if test="bsfsArrivalTime != null" >
+        BSFS_ARRIVAL_TIME,
+      </if>
+      <if test="bsfsStopSighn != null" >
+        BSFS_STOP_SIGHN,
+      </if>
+      <if test="bsfsShareSighn != null" >
+        BSFS_SHARE_SIGHN,
+      </if>
+      <if test="bsfsSchedule != null" >
+        BSFS_SCHEDULE,
+      </if>
+      <if test="bsfsAircrfttype != null" >
+        BSFS_AIRCRFTTYPE,
+      </if>
+      <if test="bsfsMileage != null" >
+        BSFS_MILEAGE,
+      </if>
+      <if test="bsfsFlightMileage != null" >
+        BSFS_FLIGHT_MILEAGE,
+      </if>
+      <if test="bsfsPunctualityRate != null" >
+        BSFS_PUNCTUALITY_RATE,
+      </if>
+      <if test="bsfsEffectiveDate != null" >
+        BSFS_EFFECTIVE_DATE,
+      </if>
+      <if test="bsfsExpirationDate != null" >
+        BSFS_EXPIRATION_DATE,
+      </if>
+      <if test="bsfsIshotroute != null" >
+        BSFS_ISHOTROUTE,
+      </if>
+      <if test="recStatus != null" >
+        REC_STATUS,
+      </if>
+      <if test="recVer != null" >
+        REC_VER,
+      </if>
+      <if test="creator != null" >
+        CREATOR,
+      </if>
+      <if test="createName != null" >
+        CREATE_NAME,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="modifier != null" >
+        MODIFIER,
+      </if>
+      <if test="modifyName != null" >
+        MODIFY_NAME,
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME,
+      </if>
+      <if test="substr1 != null" >
+        SUBSTR1,
+      </if>
+      <if test="substr2 != null" >
+        SUBSTR2,
+      </if>
+      <if test="subdecima1 != null" >
+        SUBdecima1,
+      </if>
+      <if test="subdecima2 != null" >
+        SUBdecima2,
+      </if>
+      <if test="subdate1 != null" >
+        SUBDATE1,
+      </if>
+      <if test="subdate2 != null" >
+        SUBDATE2,
+      </if>
+      <if test="bsfsStatusZh != null" >
+        BSFS_STATUS_ZH,
+      </if>
+      <if test="bsfsStatusEn != null" >
+        bsfs_status_en,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bsfsSerialNumber != null" >
+        #{bsfsSerialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsUpdateDate != null" >
+        #{bsfsUpdateDate,jdbcType=DATE},
+      </if>
+      <if test="bsfsFlightType != null" >
+        #{bsfsFlightType,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsAirlinecode != null" >
+        #{bsfsAirlinecode,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsTransportname != null" >
+        #{bsfsTransportname,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsStartstationCode != null" >
+        #{bsfsStartstationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsEndstationCode != null" >
+        #{bsfsEndstationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsStartcityName != null" >
+        #{bsfsStartcityName,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsEndcityName != null" >
+        #{bsfsEndcityName,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsDepartureTime != null" >
+        #{bsfsDepartureTime,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsArrivalTime != null" >
+        #{bsfsArrivalTime,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsStopSighn != null" >
+        #{bsfsStopSighn,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsShareSighn != null" >
+        #{bsfsShareSighn,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsSchedule != null" >
+        #{bsfsSchedule,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsAircrfttype != null" >
+        #{bsfsAircrfttype,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsMileage != null" >
+        #{bsfsMileage,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsFlightMileage != null" >
+        #{bsfsFlightMileage,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsPunctualityRate != null" >
+        #{bsfsPunctualityRate,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsEffectiveDate != null" >
+        #{bsfsEffectiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bsfsExpirationDate != null" >
+        #{bsfsExpirationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bsfsIshotroute != null" >
+        #{bsfsIshotroute,jdbcType=VARCHAR},
+      </if>
+      <if test="recStatus != null" >
+        #{recStatus,jdbcType=INTEGER},
+      </if>
+      <if test="recVer != null" >
+        #{recVer,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createName != null" >
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyName != null" >
+        #{modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="substr1 != null" >
+        #{substr1,jdbcType=VARCHAR},
+      </if>
+      <if test="substr2 != null" >
+        #{substr2,jdbcType=VARCHAR},
+      </if>
+      <if test="subdecima1 != null" >
+        #{subdecima1,jdbcType=DECIMAL},
+      </if>
+      <if test="subdecima2 != null" >
+        #{subdecima2,jdbcType=DECIMAL},
+      </if>
+      <if test="subdate1 != null" >
+        #{subdate1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subdate2 != null" >
+        #{subdate2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bsfsStatusZh != null" >
+        #{bsfsStatusZh,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsStatusEn != null" >
+        #{bsfsStatusEn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="hdli.po.BsFlightScheduleExample" resultType="java.lang.Integer" >
+    select count(*) from bs_flight_schedule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update bs_flight_schedule
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.bsfsSerialNumber != null" >
+        BSFS_SERIAL_NUMBER = #{record.bsfsSerialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsUpdateDate != null" >
+        BSFS_UPDATE_DATE = #{record.bsfsUpdateDate,jdbcType=DATE},
+      </if>
+      <if test="record.bsfsFlightType != null" >
+        BSFS_FLIGHT_TYPE = #{record.bsfsFlightType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsAirlinecode != null" >
+        BSFS_AIRLINECODE = #{record.bsfsAirlinecode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsTransportname != null" >
+        BSFS_TRANSPORTNAME = #{record.bsfsTransportname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsStartstationCode != null" >
+        BSFS_STARTSTATION_CODE = #{record.bsfsStartstationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsEndstationCode != null" >
+        BSFS_ENDSTATION_CODE = #{record.bsfsEndstationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsStartcityName != null" >
+        BSFS_STARTCITY_NAME = #{record.bsfsStartcityName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsEndcityName != null" >
+        BSFS_ENDCITY_NAME = #{record.bsfsEndcityName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsDepartureTime != null" >
+        BSFS_DEPARTURE_TIME = #{record.bsfsDepartureTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsArrivalTime != null" >
+        BSFS_ARRIVAL_TIME = #{record.bsfsArrivalTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsStopSighn != null" >
+        BSFS_STOP_SIGHN = #{record.bsfsStopSighn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsShareSighn != null" >
+        BSFS_SHARE_SIGHN = #{record.bsfsShareSighn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsSchedule != null" >
+        BSFS_SCHEDULE = #{record.bsfsSchedule,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsAircrfttype != null" >
+        BSFS_AIRCRFTTYPE = #{record.bsfsAircrfttype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsMileage != null" >
+        BSFS_MILEAGE = #{record.bsfsMileage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsFlightMileage != null" >
+        BSFS_FLIGHT_MILEAGE = #{record.bsfsFlightMileage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsPunctualityRate != null" >
+        BSFS_PUNCTUALITY_RATE = #{record.bsfsPunctualityRate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsEffectiveDate != null" >
+        BSFS_EFFECTIVE_DATE = #{record.bsfsEffectiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bsfsExpirationDate != null" >
+        BSFS_EXPIRATION_DATE = #{record.bsfsExpirationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bsfsIshotroute != null" >
+        BSFS_ISHOTROUTE = #{record.bsfsIshotroute,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recStatus != null" >
+        REC_STATUS = #{record.recStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.recVer != null" >
+        REC_VER = #{record.recVer,jdbcType=INTEGER},
+      </if>
+      <if test="record.creator != null" >
+        CREATOR = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createName != null" >
+        CREATE_NAME = #{record.createName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifier != null" >
+        MODIFIER = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifyName != null" >
+        MODIFY_NAME = #{record.modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifyTime != null" >
+        MODIFY_TIME = #{record.modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.substr1 != null" >
+        SUBSTR1 = #{record.substr1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.substr2 != null" >
+        SUBSTR2 = #{record.substr2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subdecima1 != null" >
+        SUBdecima1 = #{record.subdecima1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.subdecima2 != null" >
+        SUBdecima2 = #{record.subdecima2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.subdate1 != null" >
+        SUBDATE1 = #{record.subdate1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.subdate2 != null" >
+        SUBDATE2 = #{record.subdate2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bsfsStatusZh != null" >
+        BSFS_STATUS_ZH = #{record.bsfsStatusZh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsfsStatusEn != null" >
+        bsfs_status_en = #{record.bsfsStatusEn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update bs_flight_schedule
+    set ID = #{record.id,jdbcType=BIGINT},
+      BSFS_SERIAL_NUMBER = #{record.bsfsSerialNumber,jdbcType=VARCHAR},
+      BSFS_UPDATE_DATE = #{record.bsfsUpdateDate,jdbcType=DATE},
+      BSFS_FLIGHT_TYPE = #{record.bsfsFlightType,jdbcType=VARCHAR},
+      BSFS_AIRLINECODE = #{record.bsfsAirlinecode,jdbcType=VARCHAR},
+      BSFS_TRANSPORTNAME = #{record.bsfsTransportname,jdbcType=VARCHAR},
+      BSFS_STARTSTATION_CODE = #{record.bsfsStartstationCode,jdbcType=VARCHAR},
+      BSFS_ENDSTATION_CODE = #{record.bsfsEndstationCode,jdbcType=VARCHAR},
+      BSFS_STARTCITY_NAME = #{record.bsfsStartcityName,jdbcType=VARCHAR},
+      BSFS_ENDCITY_NAME = #{record.bsfsEndcityName,jdbcType=VARCHAR},
+      BSFS_DEPARTURE_TIME = #{record.bsfsDepartureTime,jdbcType=VARCHAR},
+      BSFS_ARRIVAL_TIME = #{record.bsfsArrivalTime,jdbcType=VARCHAR},
+      BSFS_STOP_SIGHN = #{record.bsfsStopSighn,jdbcType=VARCHAR},
+      BSFS_SHARE_SIGHN = #{record.bsfsShareSighn,jdbcType=VARCHAR},
+      BSFS_SCHEDULE = #{record.bsfsSchedule,jdbcType=VARCHAR},
+      BSFS_AIRCRFTTYPE = #{record.bsfsAircrfttype,jdbcType=VARCHAR},
+      BSFS_MILEAGE = #{record.bsfsMileage,jdbcType=VARCHAR},
+      BSFS_FLIGHT_MILEAGE = #{record.bsfsFlightMileage,jdbcType=VARCHAR},
+      BSFS_PUNCTUALITY_RATE = #{record.bsfsPunctualityRate,jdbcType=VARCHAR},
+      BSFS_EFFECTIVE_DATE = #{record.bsfsEffectiveDate,jdbcType=TIMESTAMP},
+      BSFS_EXPIRATION_DATE = #{record.bsfsExpirationDate,jdbcType=TIMESTAMP},
+      BSFS_ISHOTROUTE = #{record.bsfsIshotroute,jdbcType=VARCHAR},
+      REC_STATUS = #{record.recStatus,jdbcType=INTEGER},
+      REC_VER = #{record.recVer,jdbcType=INTEGER},
+      CREATOR = #{record.creator,jdbcType=VARCHAR},
+      CREATE_NAME = #{record.createName,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      MODIFIER = #{record.modifier,jdbcType=VARCHAR},
+      MODIFY_NAME = #{record.modifyName,jdbcType=VARCHAR},
+      MODIFY_TIME = #{record.modifyTime,jdbcType=TIMESTAMP},
+      SUBSTR1 = #{record.substr1,jdbcType=VARCHAR},
+      SUBSTR2 = #{record.substr2,jdbcType=VARCHAR},
+      SUBdecima1 = #{record.subdecima1,jdbcType=DECIMAL},
+      SUBdecima2 = #{record.subdecima2,jdbcType=DECIMAL},
+      SUBDATE1 = #{record.subdate1,jdbcType=TIMESTAMP},
+      SUBDATE2 = #{record.subdate2,jdbcType=TIMESTAMP},
+      BSFS_STATUS_ZH = #{record.bsfsStatusZh,jdbcType=VARCHAR},
+      bsfs_status_en = #{record.bsfsStatusEn,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="hdli.po.BsFlightSchedule" >
+    update bs_flight_schedule
+    <set >
+      <if test="bsfsSerialNumber != null" >
+        BSFS_SERIAL_NUMBER = #{bsfsSerialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsUpdateDate != null" >
+        BSFS_UPDATE_DATE = #{bsfsUpdateDate,jdbcType=DATE},
+      </if>
+      <if test="bsfsFlightType != null" >
+        BSFS_FLIGHT_TYPE = #{bsfsFlightType,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsAirlinecode != null" >
+        BSFS_AIRLINECODE = #{bsfsAirlinecode,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsTransportname != null" >
+        BSFS_TRANSPORTNAME = #{bsfsTransportname,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsStartstationCode != null" >
+        BSFS_STARTSTATION_CODE = #{bsfsStartstationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsEndstationCode != null" >
+        BSFS_ENDSTATION_CODE = #{bsfsEndstationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsStartcityName != null" >
+        BSFS_STARTCITY_NAME = #{bsfsStartcityName,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsEndcityName != null" >
+        BSFS_ENDCITY_NAME = #{bsfsEndcityName,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsDepartureTime != null" >
+        BSFS_DEPARTURE_TIME = #{bsfsDepartureTime,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsArrivalTime != null" >
+        BSFS_ARRIVAL_TIME = #{bsfsArrivalTime,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsStopSighn != null" >
+        BSFS_STOP_SIGHN = #{bsfsStopSighn,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsShareSighn != null" >
+        BSFS_SHARE_SIGHN = #{bsfsShareSighn,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsSchedule != null" >
+        BSFS_SCHEDULE = #{bsfsSchedule,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsAircrfttype != null" >
+        BSFS_AIRCRFTTYPE = #{bsfsAircrfttype,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsMileage != null" >
+        BSFS_MILEAGE = #{bsfsMileage,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsFlightMileage != null" >
+        BSFS_FLIGHT_MILEAGE = #{bsfsFlightMileage,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsPunctualityRate != null" >
+        BSFS_PUNCTUALITY_RATE = #{bsfsPunctualityRate,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsEffectiveDate != null" >
+        BSFS_EFFECTIVE_DATE = #{bsfsEffectiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bsfsExpirationDate != null" >
+        BSFS_EXPIRATION_DATE = #{bsfsExpirationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bsfsIshotroute != null" >
+        BSFS_ISHOTROUTE = #{bsfsIshotroute,jdbcType=VARCHAR},
+      </if>
+      <if test="recStatus != null" >
+        REC_STATUS = #{recStatus,jdbcType=INTEGER},
+      </if>
+      <if test="recVer != null" >
+        REC_VER = #{recVer,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        CREATOR = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createName != null" >
+        CREATE_NAME = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null" >
+        MODIFIER = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyName != null" >
+        MODIFY_NAME = #{modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="substr1 != null" >
+        SUBSTR1 = #{substr1,jdbcType=VARCHAR},
+      </if>
+      <if test="substr2 != null" >
+        SUBSTR2 = #{substr2,jdbcType=VARCHAR},
+      </if>
+      <if test="subdecima1 != null" >
+        SUBdecima1 = #{subdecima1,jdbcType=DECIMAL},
+      </if>
+      <if test="subdecima2 != null" >
+        SUBdecima2 = #{subdecima2,jdbcType=DECIMAL},
+      </if>
+      <if test="subdate1 != null" >
+        SUBDATE1 = #{subdate1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subdate2 != null" >
+        SUBDATE2 = #{subdate2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bsfsStatusZh != null" >
+        BSFS_STATUS_ZH = #{bsfsStatusZh,jdbcType=VARCHAR},
+      </if>
+      <if test="bsfsStatusEn != null" >
+        bsfs_status_en = #{bsfsStatusEn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="hdli.po.BsFlightSchedule" >
+    update bs_flight_schedule
+    set BSFS_SERIAL_NUMBER = #{bsfsSerialNumber,jdbcType=VARCHAR},
+      BSFS_UPDATE_DATE = #{bsfsUpdateDate,jdbcType=DATE},
+      BSFS_FLIGHT_TYPE = #{bsfsFlightType,jdbcType=VARCHAR},
+      BSFS_AIRLINECODE = #{bsfsAirlinecode,jdbcType=VARCHAR},
+      BSFS_TRANSPORTNAME = #{bsfsTransportname,jdbcType=VARCHAR},
+      BSFS_STARTSTATION_CODE = #{bsfsStartstationCode,jdbcType=VARCHAR},
+      BSFS_ENDSTATION_CODE = #{bsfsEndstationCode,jdbcType=VARCHAR},
+      BSFS_STARTCITY_NAME = #{bsfsStartcityName,jdbcType=VARCHAR},
+      BSFS_ENDCITY_NAME = #{bsfsEndcityName,jdbcType=VARCHAR},
+      BSFS_DEPARTURE_TIME = #{bsfsDepartureTime,jdbcType=VARCHAR},
+      BSFS_ARRIVAL_TIME = #{bsfsArrivalTime,jdbcType=VARCHAR},
+      BSFS_STOP_SIGHN = #{bsfsStopSighn,jdbcType=VARCHAR},
+      BSFS_SHARE_SIGHN = #{bsfsShareSighn,jdbcType=VARCHAR},
+      BSFS_SCHEDULE = #{bsfsSchedule,jdbcType=VARCHAR},
+      BSFS_AIRCRFTTYPE = #{bsfsAircrfttype,jdbcType=VARCHAR},
+      BSFS_MILEAGE = #{bsfsMileage,jdbcType=VARCHAR},
+      BSFS_FLIGHT_MILEAGE = #{bsfsFlightMileage,jdbcType=VARCHAR},
+      BSFS_PUNCTUALITY_RATE = #{bsfsPunctualityRate,jdbcType=VARCHAR},
+      BSFS_EFFECTIVE_DATE = #{bsfsEffectiveDate,jdbcType=TIMESTAMP},
+      BSFS_EXPIRATION_DATE = #{bsfsExpirationDate,jdbcType=TIMESTAMP},
+      BSFS_ISHOTROUTE = #{bsfsIshotroute,jdbcType=VARCHAR},
+      REC_STATUS = #{recStatus,jdbcType=INTEGER},
+      REC_VER = #{recVer,jdbcType=INTEGER},
+      CREATOR = #{creator,jdbcType=VARCHAR},
+      CREATE_NAME = #{createName,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      MODIFIER = #{modifier,jdbcType=VARCHAR},
+      MODIFY_NAME = #{modifyName,jdbcType=VARCHAR},
+      MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+      SUBSTR1 = #{substr1,jdbcType=VARCHAR},
+      SUBSTR2 = #{substr2,jdbcType=VARCHAR},
+      SUBdecima1 = #{subdecima1,jdbcType=DECIMAL},
+      SUBdecima2 = #{subdecima2,jdbcType=DECIMAL},
+      SUBDATE1 = #{subdate1,jdbcType=TIMESTAMP},
+      SUBDATE2 = #{subdate2,jdbcType=TIMESTAMP},
+      BSFS_STATUS_ZH = #{bsfsStatusZh,jdbcType=VARCHAR},
+      bsfs_status_en = #{bsfsStatusEn,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
