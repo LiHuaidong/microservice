@@ -4,6 +4,7 @@ import hdli.solrdemo.po.BsFlightSchedule;
 import hdli.solrdemo.po.BsFlightScheduleExample;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.jmx.export.annotation.ManagedOperationParameter;
 
 import java.util.List;
 
@@ -30,4 +31,6 @@ public interface BsFlightScheduleMapper {
     int updateByPrimaryKeySelective(BsFlightSchedule record);
 
     int updateByPrimaryKey(BsFlightSchedule record);
+
+    List<BsFlightSchedule> selectFlightListByDate(@Param("flightDateStr") String flightDateStr);
 }

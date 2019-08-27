@@ -4,6 +4,7 @@ import hdli.solrdemo.mapper.BsFlightScheduleMapper;
 import hdli.solrdemo.model.FlightScheduleIndexBean;
 import hdli.solrdemo.po.BsFlightSchedule;
 import hdli.solrdemo.po.BsFlightScheduleExample;
+import hdli.solrdemo.service.IndexService;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
@@ -40,29 +41,28 @@ public class IndexController {
     private static final String SOLR_URL = "http://localhost:8983/solr/testcore";
 
     @Autowired
-    BsFlightScheduleMapper bsFlightScheduleMapper;
+    IndexService indexService;
 
     @RequestMapping("/create")
     @ResponseBody
     public String create() throws IOException, SolrServerException {
         HttpSolrClient solrClient = new HttpSolrClient.Builder(SOLR_URL).withConnectionTimeout(10000).withSocketTimeout(60000).build();
 
-        BsFlightScheduleExample example = new BsFlightScheduleExample();
-        BsFlightScheduleExample.Criteria criteria = example.createCriteria();
-
-        LocalDate localDate = LocalDate.of(2019, 8, 19);
-
-        ZoneId zone = ZoneId.systemDefault();
-        Instant instant = localDate.atStartOfDay().atZone(zone).toInstant();
-        java.util.Date date = Date.from(instant);
-        criteria.andBsfsUpdateDateEqualTo(date);
-
+        List<BsFlightSchedule> flightList = indexService.getFlightScheduleList("2019-08-19");
         int commintNum = 0;
-        List<BsFlightSchedule> flightList = bsFlightScheduleMapper.selectByExample(example);
         if (flightList != null && flightList.size() > 0) {
             for (BsFlightSchedule schedule : flightList) {
                 FlightScheduleIndexBean indexBean = new FlightScheduleIndexBean();
-                BeanUtils.copyProperties(schedule, indexBean);
+                indexBean.setArriveAirport(schedule.getBsfsEndstationCode());
+                indexBean.setDepartAirport(schedule.getBsfsStartstationCode());
+                indexBean.setEndCityName(schedule.getBsfsEndcityName());
+                indexBean.setFlightDate(schedule.getBsfsUpdateDate());
+                indexBean.setFlightNo(schedule.getBsfsTransportname());
+                indexBean.setFlightType(schedule.getBsfsFlightType());
+                indexBean.setPlanArrivalTime(schedule.getBsfsArrivalTime());
+                indexBean.setPlanDepartureTime(schedule.getBsfsDepartureTime());
+                indexBean.setStartCityName(schedule.getBsfsStartcityName());
+                indexBean.setSerialNumber(schedule.getBsfsSerialNumber());
 
                 SolrInputDocument document = solrClient.getBinder().toSolrInputDocument(indexBean);
                 solrClient.add(document);
@@ -121,6 +121,16 @@ public class IndexController {
         HttpSolrClient solrClient = new HttpSolrClient.Builder(SOLR_URL).withConnectionTimeout(10000)
                 .withSocketTimeout(60000).build();
         solrClient.deleteById(docId);
+        return "SUCCESS";
+    }
+
+    @RequestMapping("/deleteAll")
+    @ResponseBody
+    public String deletAll() throws IOException, SolrServerException {
+        HttpSolrClient solrClient = new HttpSolrClient.Builder(SOLR_URL).withConnectionTimeout(10000)
+                .withSocketTimeout(60000).build();
+        solrClient.deleteByQuery("*:*");
+        solrClient.commit();
         return "SUCCESS";
     }
 

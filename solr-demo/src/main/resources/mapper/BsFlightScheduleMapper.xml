@@ -734,4 +734,10 @@
       bsfs_status_en = #{bsfsStatusEn,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectFlightListByDate" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include>
+    from bs_flight_schedule
+    where bsfs_update_date = #{flightDateStr}
+  </select>
 </mapper>
