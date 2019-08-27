@@ -2,10 +2,12 @@ package hdli.solrdemo.mapper;
 
 import hdli.solrdemo.po.BsFlightSchedule;
 import hdli.solrdemo.po.BsFlightScheduleExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface BsFlightScheduleMapper {
     int countByExample(BsFlightScheduleExample example);
 

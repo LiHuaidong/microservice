@@ -108,7 +108,7 @@
     CREATE_TIME, MODIFIER, MODIFY_NAME, MODIFY_TIME, SUBSTR1, SUBSTR2, SUBdecima1, SUBdecima2, 
     SUBDATE1, SUBDATE2, BSFS_STATUS_ZH, bsfs_status_en
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="hdli.po.BsFlightScheduleExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="hdli.solrdemo.po.BsFlightScheduleExample" >
     select
     <if test="distinct" >
       distinct
@@ -133,13 +133,13 @@
     delete from bs_flight_schedule
     where ID = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="hdli.po.BsFlightScheduleExample" >
+  <delete id="deleteByExample" parameterType="hdli.solrdemo.po.BsFlightScheduleExample" >
     delete from bs_flight_schedule
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="hdli.po.BsFlightSchedule" >
+  <insert id="insert" parameterType="hdli.solrdemo.po.BsFlightSchedule" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -172,7 +172,7 @@
       #{subdate2,jdbcType=TIMESTAMP}, #{bsfsStatusZh,jdbcType=VARCHAR}, #{bsfsStatusEn,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="hdli.po.BsFlightSchedule" >
+  <insert id="insertSelective" parameterType="hdli.solrdemo.po.BsFlightSchedule" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -404,7 +404,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="hdli.po.BsFlightScheduleExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="hdli.solrdemo.po.BsFlightScheduleExample" resultType="java.lang.Integer" >
     select count(*) from bs_flight_schedule
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -576,7 +576,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="hdli.po.BsFlightSchedule" >
+  <update id="updateByPrimaryKeySelective" parameterType="hdli.solrdemo.po.BsFlightSchedule" >
     update bs_flight_schedule
     <set >
       <if test="bsfsSerialNumber != null" >
@@ -693,7 +693,7 @@
     </set>
     where ID = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="hdli.po.BsFlightSchedule" >
+  <update id="updateByPrimaryKey" parameterType="hdli.solrdemo.po.BsFlightSchedule" >
     update bs_flight_schedule
     set BSFS_SERIAL_NUMBER = #{bsfsSerialNumber,jdbcType=VARCHAR},
       BSFS_UPDATE_DATE = #{bsfsUpdateDate,jdbcType=DATE},
