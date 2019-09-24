@@ -82,8 +82,8 @@ public class Worker implements Watcher  {
     };
 
     synchronized private void updateStatus(String status) {
-        if(status == this.status) {
-            zk.getData("/workers/" + name, status.getBytes(), -1, statusUpdateCallback, status);
+        if (status == this.status) {
+            zk.setData("/workers/work" + serverId, status.getBytes(), -1, statusUpdateCallback, status);
         }
     }
 
