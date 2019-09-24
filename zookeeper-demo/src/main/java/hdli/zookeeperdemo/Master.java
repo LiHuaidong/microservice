@@ -30,7 +30,7 @@ public class Master implements Watcher {
         Master m = new Master("2181");
         m.startZK();
         m.runForMaster();
-
+        m.bootstrap();
         if (m.isLeader) {
             Thread.sleep(60000);
         } else {
@@ -43,7 +43,7 @@ public class Master implements Watcher {
         zk.close();
     }
 
-    public void bootstrap() {
+    void bootstrap() {
         createParent("/workers", new byte[0]);
         createParent("/assign", new byte[0]);
         createParent("/tasks", new byte[0]);
@@ -54,39 +54,6 @@ public class Master implements Watcher {
         zk.create(path, data, OPEN_ACL_UNSAFE, CreateMode.PERSISTENT, createParentCallback, data);
     }
 
-    AsyncCallback.StringCallback createParentCallback = new AsyncCallback.StringCallback() {
-        @Override
-        public void processResult(int rc, String path, Object ctx, String name) {
-            switch (KeeperException.Code.get(rc)) {
-                case CONNECTIONLOSS:
-                    createParent(path, (byte[]) ctx);
-                    break;
-                case OK:
-                    logger.info("Parent created");
-                    break;
-                case NODEEXISTS:
-                    logger.warn("Parent already registered: " + path);
-                    break;
-                default:
-                    logger.error("Something went wrong: ", KeeperException.create(KeeperException.Code.get(rc), path));
-            }
-        }
-    };
-
-//    boolean checkMaster() {
-//        try {
-//            while (true) {
-//                Stat stat = new Stat();
-//                byte data[] = zk.getData("/master", false, stat);
-//                isLeader = new String(data).equals(serverId);
-//            }
-//        } catch (KeeperException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        return isLeader;
-//    }
 
     void checkMaster() {
         zk.getData("/master", false, masterCheckCallback, null);
@@ -123,6 +90,25 @@ public class Master implements Watcher {
                 case NONODE:
                     runForMaster();
                     return;
+            }
+        }
+    };
+
+    AsyncCallback.StringCallback createParentCallback = new AsyncCallback.StringCallback() {
+        @Override
+        public void processResult(int rc, String path, Object ctx, String name) {
+            switch (KeeperException.Code.get(rc)) {
+                case CONNECTIONLOSS:
+                    createParent(path, (byte[]) ctx);
+                    break;
+                case OK:
+                    logger.info("Parent created");
+                    break;
+                case NODEEXISTS:
+                    logger.warn("Parent already registered: " + path);
+                    break;
+                default:
+                    logger.error("Something went wrong: ", KeeperException.create(KeeperException.Code.get(rc), path));
             }
         }
     };
