@@ -22,8 +22,6 @@ public class RedisLock {
 
 			ts.exec();
 
-
-
 			if(jedis.get("lock").equals("" + Thread.currentThread().getId())) {
 				jedis.del("lock");
 			}
