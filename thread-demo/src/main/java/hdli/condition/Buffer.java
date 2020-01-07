@@ -28,6 +28,7 @@ public class Buffer {
             while (buffer.size() == maxSize) {
                 hasSpace.await();
             }
+            buffer.add(line);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
