@@ -29,4 +29,6 @@ public interface EmployeeMapper {
     int updateByPrimaryKey(Employee record);
 
     List<Employee> selectEmployeeList(@Param("name") String name);
+
+    List<Employee> selectEmployeeList1(@Param("companyId") Integer companyId);
 }

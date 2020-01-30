@@ -1,8 +1,7 @@
 package hdli.zookeeperdemo;
 
 import org.apache.zookeeper.*;
-import org.apache.zookeeper.Watcher;
-import org.apache.zookeeper.proto.WatcherEvent;
+import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +13,7 @@ public class Worker implements Watcher  {
     private static final Logger logger = LoggerFactory.getLogger(Worker.class);
 
     ZooKeeper zk;
+    String status;
     String hostPort;
     String serverId = Integer.toHexString(Random.class.newInstance().nextInt());
 
@@ -68,5 +68,27 @@ public class Worker implements Watcher  {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    AsyncCallback.StatCallback statusUpdateCallback = new AsyncCallback.StatCallback() {
+        @Override
+        public void processResult(int rc, String path, Object ctx, Stat stat) {
+            switch (KeeperException.Code.get(rc)) {
+                case CONNECTIONLOSS:
+                    updateStatus((String) ctx);
+                    return;
+            }
+        }
+    };
+
+    synchronized private void updateStatus(String status) {
+        if (status == this.status) {
+            zk.setData("/workers/work" + serverId, status.getBytes(), -1, statusUpdateCallback, status);
+        }
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+        updateStatus(status);
     }
 }

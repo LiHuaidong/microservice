@@ -13,7 +13,7 @@ public class RedisUtils {
 	private static final int PORT = 6379;
 
 	public static Jedis getRedis() {
-		return new Jedis(HOST,PORT);
+		return new Jedis("10.203.12.74",8081);
 	}
 
 }

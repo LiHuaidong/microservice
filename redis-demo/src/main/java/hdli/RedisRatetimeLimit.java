@@ -31,6 +31,7 @@ public class RedisRatetimeLimit {
 					System.out.println("超出请求次数");
 				}
 			} else if (pttl == -1 || pttl == -2 || pttl == 0) {
+				jedis.watch(key);
 				Transaction tx = jedis.multi();
 				Response<Long> rsp = tx.incr(key);
 				tx.expire(key, 60);
