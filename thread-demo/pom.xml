@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>hdli</groupId>
-  <artifactId>thread-study</artifactId>
+  <artifactId>thread-demo</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>thread-study</name>
+  <name>thread-demo</name>
   <url>http://maven.apache.org</url>
 
   <properties>
