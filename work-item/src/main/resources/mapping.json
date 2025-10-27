@@ -1,0 +1,151 @@
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1,
+    "refresh_interval": "30s",
+    "analysis": {
+      "analyzer": {
+        "ik_smart": {
+          "type": "custom",
+          "tokenizer": "ik_smart"
+        },
+        "ik_max_word": {
+          "type": "custom",
+          "tokenizer": "ik_max_word"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "id": {
+        "type": "long",
+        "index": false
+      },
+      "type": {
+        "type": "keyword",
+        "fields": {
+          "search": {
+            "type": "text",
+            "analyzer": "ik_max_word"
+          }
+        }
+      },
+      "title": {
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "assignee": {
+        "type": "keyword",
+        "fields": {
+          "search": {
+            "type": "text",
+            "analyzer": "ik_smart"
+          }
+        }
+      },
+      "status": {
+        "type": "keyword",
+        "fields": {
+          "raw": {
+            "type": "keyword"
+          }
+        }
+      },
+      "description": {
+        "type": "text",
+        "analyzer": "ik_smart"
+      },
+      "value": {
+        "type": "scaled_float",
+        "scaling_factor": 100,
+        "fields": {
+          "raw": {
+            "type": "double"
+          }
+        }
+      },
+      "product_team": {
+        "type": "keyword",
+        "fields": {
+          "display": {
+            "type": "text",
+            "analyzer": "standard"
+          }
+        }
+      },
+      "product_team_code": {
+        "type": "keyword"
+      },
+      "agile_team": {
+        "type": "keyword",
+        "fields": {
+          "display": {
+            "type": "text",
+            "analyzer": "standard"
+          }
+        }
+      },
+      "agile_team_code": {
+        "type": "keyword"
+      },
+      "business_l0": {
+        "type": "keyword",
+        "fields": {
+          "display": {
+            "type": "text",
+            "analyzer": "standard"
+          }
+        }
+      },
+      "business_l0_code": {
+        "type": "keyword"
+      },
+      "business_l1": {
+        "type": "keyword",
+        "fields": {
+          "display": {
+            "type": "text",
+            "analyzer": "standard"
+          }
+        }
+      },
+      "business_l1_code": {
+        "type": "keyword"
+      },
+      "business_l2": {
+        "type": "keyword"
+      },
+      "business_l2_code": {
+        "type": "keyword"
+      },
+      "business_l3": {
+        "type": "keyword"
+      },
+      "business_l3_code": {
+        "type": "keyword"
+      },
+      "business_l4": {
+        "type": "keyword"
+      },
+      "business_l4_code": {
+        "type": "keyword"
+      },
+      "create_time": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss||epoch_millis"
+      },
+      "update_time": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss||epoch_millis"
+      }
+    }
+  }
+}
