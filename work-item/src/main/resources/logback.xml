@@ -1,0 +1,18 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 降低 Redisson 及其底层依赖的日志级别，隐藏连接等冗余日志 -->
+    <logger name="org.redisson" level="ERROR"/>
+    <logger name="org.redisson.connection" level="ERROR"/>
+    <logger name="io.netty" level="WARN"/>
+    <logger name="redis.clients" level="WARN"/>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
+

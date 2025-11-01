@@ -138,6 +138,13 @@
             <version>5.2.1</version>
         </dependency>
 
+        <!-- Redis Redisson client -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.27.2</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

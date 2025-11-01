@@ -1,5 +1,8 @@
 package hdli;
 
+import java.net.http.HttpClient;
+import java.util.List;
+
 public class ElasticsearchIndexDocManager {
 
     private static final String ELASTICSEARCH_URL = "https://localhost:9200";
@@ -22,15 +25,13 @@ public class ElasticsearchIndexDocManager {
         // }
         // System.out.println(response);
 
-        // String queryJson = "{\"query\":{\"match_all\":{}}}";
-        // int from = 0;
-        // int size = 10;
-        // try {
-        //     response = queryDoc(index, queryJson, from, size, username, password);
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
-        // System.out.println(response);
+//        String queryJson = null; // 使用方法内默认 {"query":{"match_all":{}},"track_total_hits":true}
+//        int size = 20;
+//        try {
+//            benchmarkSearchAfterById(index, queryJson, size, username, password);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
 
         // String docJson = "{\"name\":\"test\"}";
@@ -64,6 +65,12 @@ public class ElasticsearchIndexDocManager {
         // }
         // System.out.println(response);
 
+        buildWorkItems(index, username, password);
+
+        System.out.println("All operations completed successfully");
+    }
+
+    private static void buildWorkItems(String index, String username, String password) {
         // 1. JDBC config
         String jdbcUrl = "jdbc:mysql://localhost:3306/work_db";
         String jdbcUser = "root";
@@ -174,8 +181,6 @@ public class ElasticsearchIndexDocManager {
             } catch (Exception e) {
             }
         }
-
-        System.out.println("All operations completed successfully");
     }
 
     /**
@@ -260,6 +265,191 @@ public class ElasticsearchIndexDocManager {
 
         java.net.http.HttpResponse<String> response = httpClient.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
         return response.body();
+    }
+
+    /**
+     * 查询文档（基于 search_after 的深分页）
+     * <p>
+     * 使用场景：需要稳定排序的游标式翻页，避免深度 from+size 的性能问题。
+     * 约束：必须提供稳定且唯一的排序（通常最后追加 id 做为兜底）。
+     *
+     * @param index             索引名
+     * @param queryJson         完整查询 JSON（对象结构，如 {"query":{...},"track_total_hits":true}）。若为空将自动使用 match_all
+     * @param sortFields        排序字段列表：元素形如 "field:asc" 或 "field:desc"；未指定方向默认 asc
+     * @param searchAfterValues 上一页最后一条命中的 sort 值列表（与 sortFields 一一对应）。第一页可传 null 或空
+     * @param size              本页大小
+     * @param username          用户名
+     * @param password          密码
+     * @return 响应内容（原始 JSON 字符串）
+     * @throws Exception 出错时抛出
+     */
+    public static String queryDocSearchAfter(
+            String index,
+            String queryJson,
+            java.util.List<String> sortFields,
+            java.util.List<Object> searchAfterValues,
+            int size,
+            String username,
+            String password
+    ) throws Exception {
+        String url = ELASTICSEARCH_URL + "/" + index + "/_search";
+
+        HttpClient httpClient = createTrustAllHttpClient();
+        String authHeader = getBasicAuthHeader(username, password);
+
+        // 1) 基础查询体：若未提供则使用 match_all
+        String baseQueryBody = normalizeJsonObject(
+                queryJson,
+                "{\"query\":{\"match_all\":{}}}"
+        );
+
+        // 2) 组装 sort 数组 JSON
+        String sortArrayJson = buildSortArrayJson(sortFields);
+
+        // 3) 合并：在原对象末尾追加 size、sort、以及（可选）search_after
+        StringBuilder finalBodyBuilder = new StringBuilder();
+        finalBodyBuilder.append(baseQueryBody, 0, baseQueryBody.length() - 1); // 去掉最后一个 '}'
+        finalBodyBuilder.append(",\"size\":").append(size);
+        finalBodyBuilder.append(",\"sort\":").append(sortArrayJson);
+        if (searchAfterValues != null && !searchAfterValues.isEmpty()) {
+            finalBodyBuilder.append(",\"search_after\":[");
+            for (int i = 0; i < searchAfterValues.size(); i++) {
+                finalBodyBuilder.append(toJsonValue(searchAfterValues.get(i)));
+                if (i < searchAfterValues.size() - 1) finalBodyBuilder.append(',');
+            }
+            finalBodyBuilder.append(']');
+        }
+        finalBodyBuilder.append('}');
+        String requestBody = finalBodyBuilder.toString();
+
+        java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                .uri(java.net.URI.create(url))
+                .header("Content-Type", "application/json")
+                .header("Authorization", authHeader)
+                .timeout(java.time.Duration.ofSeconds(15))
+                .POST(java.net.http.HttpRequest.BodyPublishers.ofString(requestBody))
+                .build();
+
+        java.net.http.HttpResponse<String> response = httpClient.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
+
+    /**
+     * 将形如 ["fieldA:asc", "fieldB:desc", "id:asc"] 转为 ES 可用的 sort JSON 数组
+     * 生成形如：[{"fieldA":{"order":"asc"}},{"fieldB":{"order":"desc"}},{"id":{"order":"asc"}}]
+     */
+    private static String buildSortArrayJson(java.util.List<String> sortFields) {
+        if (sortFields == null || sortFields.isEmpty()) {
+            throw new IllegalArgumentException("sortFields 不能为空，search_after 需要稳定排序");
+        }
+        StringBuilder sb = new StringBuilder().append('[');
+        for (int i = 0; i < sortFields.size(); i++) {
+            String raw = sortFields.get(i);
+            String field = raw;
+            String order = "asc";
+            int colon = raw.lastIndexOf(':');
+            if (colon > 0 && colon < raw.length() - 1) {
+                field = raw.substring(0, colon);
+                order = raw.substring(colon + 1).trim().toLowerCase();
+                if (!order.equals("asc") && !order.equals("desc")) order = "asc";
+            }
+            sb.append('{')
+                    .append('"').append(escapeJson(field)).append('"')
+                    .append(':')
+                    .append('{')
+                    .append("\"order\":\"").append(order).append("\"");
+            // 可按需追加 unmapped_type 等参数
+            sb.append('}').append('}');
+            if (i < sortFields.size() - 1) sb.append(',');
+        }
+        sb.append(']');
+        return sb.toString();
+    }
+
+    /**
+     * 将任意值转为 JSON 值（字符串会做转义并带引号）
+     */
+    private static String toJsonValue(Object value) {
+        if (value == null) return "null";
+        if (value instanceof Number || value instanceof Boolean) {
+            return String.valueOf(value);
+        }
+        if (value instanceof java.time.temporal.TemporalAccessor) {
+            // 简单格式化为 ISO-8601 字符串
+            String s = value.toString();
+            return '"' + escapeJson(s) + '"';
+        }
+        if (value instanceof java.util.Date) {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            String s = sdf.format((java.util.Date) value);
+            return '"' + escapeJson(s) + '"';
+        }
+        // 其他一律按字符串处理
+        String s = String.valueOf(value);
+        return '"' + escapeJson(s) + '"';
+    }
+
+    /**
+     * 简单的 JSON 字符串转义
+     */
+    private static String escapeJson(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '"':
+                    sb.append("\\\"");
+                    break;
+                case '\\':
+                    sb.append("\\\\");
+                    break;
+                case '\b':
+                    sb.append("\\b");
+                    break;
+                case '\f':
+                    sb.append("\\f");
+                    break;
+                case '\n':
+                    sb.append("\\n");
+                    break;
+                case '\r':
+                    sb.append("\\r");
+                    break;
+                case '\t':
+                    sb.append("\\t");
+                    break;
+                default:
+                    if (c < 0x20) {
+                        String hex = Integer.toHexString(c);
+                        sb.append("\\u");
+                        for (int pad = hex.length(); pad < 4; pad++) sb.append('0');
+                        sb.append(hex);
+                    } else {
+                        sb.append(c);
+                    }
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 规范化为 JSON 对象字符串：若为空用默认值；若不是以 { 开头且以 } 结尾，则包一层 { ... }。
+     */
+    private static String normalizeJsonObject(String candidate, String defaultJsonObject) {
+        if (candidate == null || candidate.trim().isEmpty()) {
+            return defaultJsonObject;
+        }
+        String trimmed = candidate.trim();
+        if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+            return trimmed;
+        }
+        // 去除可能的多余大括号或逗号
+        String middle = trimmed;
+        if (middle.startsWith("{")) middle = middle.substring(1);
+        if (middle.endsWith("}")) middle = middle.substring(0, middle.length() - 1);
+        if (middle.startsWith(",")) middle = middle.substring(1);
+        if (middle.endsWith(",")) middle = middle.substring(0, middle.length() - 1);
+        return "{" + middle + "}";
     }
 
     /**
@@ -438,4 +628,261 @@ public class ElasticsearchIndexDocManager {
         return "Basic " + java.util.Base64.getEncoder().encodeToString(credentials.getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
+
+    /**
+     * 基于 id 的 search_after 递归分页基准：从首页开始，每页 size 条，打印耗时与命中数。
+     */
+    private static void benchmarkSearchAfterById(String index, String queryJson, int size, String username, String password) throws Exception {
+        // 确保 queryJson 是对象体（闭合由方法内部处理）
+        String baseQueryJson = normalizeJsonObject(
+                queryJson,
+                "{\"query\":{\"match_all\":{}},\"track_total_hits\":true}"
+        );
+
+        java.util.List<String> sortFields = List.of("id:asc");
+        java.util.List<Object> after = null; // 第一页
+
+        long totalHits = 0;
+        int page = 0;
+        for (; ; ) {
+            page++;
+            long t0 = System.nanoTime();
+            String resp = queryDocSearchAfter(index, baseQueryJson, sortFields, after, size, username, password);
+            long t1 = System.nanoTime();
+
+            // 解析 hits.hits 与最后一条的 sort
+            java.util.List<java.util.Map<String, Object>> hits = extractHits(resp);
+            int count = hits.size();
+            totalHits += count;
+            System.out.println("[search_after] page=" + page + ", size=" + size + ", hits=" + count + ", costMs=" + ((t1 - t0) / 1_000_000.0));
+
+            if (count == 0) break;
+
+            java.util.List<Object> nextAfter = extractLastSort(resp);
+            if (nextAfter == null || nextAfter.isEmpty()) break;
+            after = nextAfter;
+
+            if (count < size) break; // 最后一页
+        }
+        System.out.println("[search_after] done, totalHits=" + totalHits);
+    }
+
+    // 解析 JSON：轻量级解析器，避免引入外部依赖。这里只解析 hits.hits 与每条的 sort。
+    @SuppressWarnings("unchecked")
+    private static java.util.List<java.util.Map<String, Object>> extractHits(String json) throws Exception {
+        java.util.Map<String, Object> obj = parseJsonObject(json);
+        Object hitsObj = obj.get("hits");
+        if (!(hitsObj instanceof java.util.Map)) return java.util.Collections.emptyList();
+        Object arr = ((java.util.Map<String, Object>) hitsObj).get("hits");
+        if (!(arr instanceof java.util.List)) return java.util.Collections.emptyList();
+        return (java.util.List<java.util.Map<String, Object>>) arr;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static java.util.List<Object> extractLastSort(String json) throws Exception {
+        java.util.Map<String, Object> obj = parseJsonObject(json);
+        Object hitsObj = obj.get("hits");
+        if (!(hitsObj instanceof java.util.Map)) return java.util.Collections.emptyList();
+        Object arr = ((java.util.Map<String, Object>) hitsObj).get("hits");
+        if (!(arr instanceof java.util.List)) return java.util.Collections.emptyList();
+        java.util.List<java.util.Map<String, Object>> list = (java.util.List<java.util.Map<String, Object>>) arr;
+        if (list.isEmpty()) return java.util.Collections.emptyList();
+        Object sort = list.get(list.size() - 1).get("sort");
+        if (sort instanceof java.util.List) {
+            return (java.util.List<Object>) sort;
+        }
+        return java.util.Collections.emptyList();
+    }
+
+    // 极简 JSON 解析：仅支持对象/数组/字符串/数值/布尔/null，满足当前需求
+    private static java.util.Map<String, Object> parseJsonObject(String s) throws Exception {
+        return (java.util.Map<String, Object>) parse(new JsonCursor(s));
+    }
+
+    // --- 下面是一个非常简单的 JSON 解析器（为避免外部依赖） ---
+    private static Object parse(JsonCursor c) throws Exception {
+        c.skipWs();
+        char ch = c.peek();
+        if (ch == '{') return parseObj(c);
+        if (ch == '[') return parseArr(c);
+        if (ch == '"') return parseStr(c);
+        if (ch == 't' || ch == 'f') return parseBool(c);
+        if (ch == 'n') return parseNull(c);
+        return parseNum(c);
+    }
+
+    private static java.util.Map<String, Object> parseObj(JsonCursor c) throws Exception {
+        java.util.Map<String, Object> map = new java.util.LinkedHashMap<>();
+        c.expect('{');
+        c.skipWs();
+        if (c.peek() == '}') {
+            c.expect('}');
+            return map;
+        }
+        for (; ; ) {
+            String key = parseStr(c);
+            c.skipWs();
+            c.expect(':');
+            Object val = parse(c);
+            map.put(key, val);
+            c.skipWs();
+            char ch = c.expect(',', '}');
+            if (ch == '}') break;
+        }
+        return map;
+    }
+
+    private static java.util.List<Object> parseArr(JsonCursor c) throws Exception {
+        java.util.List<Object> list = new java.util.ArrayList<>();
+        c.expect('[');
+        c.skipWs();
+        if (c.peek() == ']') {
+            c.expect(']');
+            return list;
+        }
+        for (; ; ) {
+            Object val = parse(c);
+            list.add(val);
+            c.skipWs();
+            char ch = c.expect(',', ']');
+            if (ch == ']') break;
+        }
+        return list;
+    }
+
+    private static String parseStr(JsonCursor c) throws Exception {
+        c.expect('"');
+        StringBuilder sb = new StringBuilder();
+        while (!c.eof()) {
+            char ch = c.next();
+            if (ch == '"') break;
+            if (ch == '\\') {
+                char e = c.next();
+                switch (e) {
+                    case '"':
+                        sb.append('"');
+                        break;
+                    case '\\':
+                        sb.append('\\');
+                        break;
+                    case '/':
+                        sb.append('/');
+                        break;
+                    case 'b':
+                        sb.append('\b');
+                        break;
+                    case 'f':
+                        sb.append('\f');
+                        break;
+                    case 'n':
+                        sb.append('\n');
+                        break;
+                    case 'r':
+                        sb.append('\r');
+                        break;
+                    case 't':
+                        sb.append('\t');
+                        break;
+                    case 'u':
+                        int code = Integer.parseInt(c.next(4), 16);
+                        sb.append((char) code);
+                        break;
+                    default:
+                        throw new Exception("Invalid escape: \\" + e);
+                }
+            } else {
+                sb.append(ch);
+            }
+        }
+        return sb.toString();
+    }
+
+    private static Boolean parseBool(JsonCursor c) throws Exception {
+        if (c.startsWith("true")) {
+            c.consume(4);
+            return Boolean.TRUE;
+        }
+        if (c.startsWith("false")) {
+            c.consume(5);
+            return Boolean.FALSE;
+        }
+        throw new Exception("Invalid boolean");
+    }
+
+    private static Object parseNull(JsonCursor c) throws Exception {
+        if (c.startsWith("null")) {
+            c.consume(4);
+            return null;
+        }
+        throw new Exception("Invalid null");
+    }
+
+    private static Number parseNum(JsonCursor c) throws Exception {
+        int start = c.pos;
+        while (!c.eof()) {
+            char ch = c.peek();
+            if ((ch >= '0' && ch <= '9') || ch == '-' || ch == '+' || ch == '.' || ch == 'e' || ch == 'E') {
+                c.next();
+            } else break;
+        }
+        String num = c.input.substring(start, c.pos);
+        if (num.indexOf('.') >= 0 || num.indexOf('e') >= 0 || num.indexOf('E') >= 0) return Double.parseDouble(num);
+        long lv = Long.parseLong(num);
+        if (lv >= Integer.MIN_VALUE && lv <= Integer.MAX_VALUE) return (int) lv;
+        return lv;
+    }
+
+    private static final class JsonCursor {
+        final String input;
+        int pos = 0;
+
+        JsonCursor(String s) {
+            this.input = s;
+        }
+
+        boolean eof() {
+            return pos >= input.length();
+        }
+
+        char peek() {
+            return input.charAt(pos);
+        }
+
+        char next() {
+            return input.charAt(pos++);
+        }
+
+        void skipWs() {
+            while (!eof()) {
+                char c = input.charAt(pos);
+                if (c == ' ' || c == '\n' || c == '\r' || c == '\t') pos++;
+                else break;
+            }
+        }
+
+        void consume(int n) {
+            pos += n;
+        }
+
+        boolean startsWith(String s) {
+            return input.startsWith(s, pos);
+        }
+
+        char expect(char... options) throws Exception {
+            char c = next();
+            for (char o : options) if (c == o) return c;
+            throw new Exception("Expect one of " + java.util.Arrays.toString(options) + ", got " + c);
+        }
+
+        void expect(char must) throws Exception {
+            char c = next();
+            if (c != must) throw new Exception("Expect '" + must + "' but got '" + c + "'");
+        }
+
+        String next(int n) {
+            String s = input.substring(pos, pos + n);
+            pos += n;
+            return s;
+        }
+    }
 }
